@@ -1,3 +1,4 @@
+'use strict';
 var config = {
     form: "editForm",
     list: "bookList",
@@ -7,47 +8,60 @@ var config = {
 var app = new App(config);
 
 function App(config) {
-
-    if (config) {
-        for (var key in config) {
-            if (!key) throw new Error("Не задано поле: " + key);
-            if (!config[key]) throw new Error("Пустое значение поля: " + key);
-        }
-        this.form = document.querySelector('[data-app-form=' + config.form + ']');
-        this.list = document.querySelector('[data-app-list=' + config.list + ']');
-        this.container = document.querySelector('[data-app-container=' + config.app + ']');
-    } else {
-        this.service("Не задана конфигурация приложения");
+    var key;
+    if (!config) {
+        throw new Error("Не задана конфигурация приложения");
     }
+
+    for (key in config) {
+        if (!config[key]) throw new Error("Пустое значение поля: " + key);
+    }
+    this.form = document.querySelector('[data-app-form=' + config.form + ']');
+    this.list = document.querySelector('[data-app-list=' + config.list + ']');
+    this.container = document.querySelector('[data-app-container=' + config.app + ']');
 };
 
+App.prototype.service = function() {
 
-
-App.prototype.service = {
-    appError: function(msg) {
+    var self = this;
+    var appError = function(msg) {
         throw new Error(msg);
-    },
-    hash: function(str) {
-        if (!str) return false;
-        var hash = 5381;
+    };
+    var createId = function(str) {
+
+        var hash = 0,
+            i, char;
+
+        if (str.length == 0) return hash;
         for (i = 0; i < str.length; i++) {
             char = str.charCodeAt(i);
-            hash = ((hash << 5) + hash) + char; /* hash * 33 + c */
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash; // Convert to 32bit integer
         }
-        return hash;
-    },
-    eventEmmitter: function(name, data) {
-        var appEvent = new CustomEvent("App:" + name, {
+        //Convert to string
+        return hash.toString(36).slice(2);
+
+    }
+    var eventEmmitter = function(name, data) {
+        var appEvent = new CustomEvent(self.constructor.name + ":" + name, {
             bubbles: true,
             detail: data
         });
-        this.container.dispatchEvent(appEvent);
+        self.container.dispatchEvent(appEvent);
+    };
+    return {
+        createId: createId,
+        appError: appError,
+        eventEmmitter: eventEmmitter
     }
-};
+}.call(app);
 
-App.prototype.Controller = function(app, global) {
-    app.form.addEventListener('submit', formHandler, false);
-    app.list.addEventListener('click', listHandler, false);
+
+App.prototype.Controller = function() {
+    var self = this;
+
+    this.form.addEventListener('submit', formHandler, false);
+    this.list.addEventListener('click', listHandler, false);
 
     function listHandler(event) {
 
@@ -55,7 +69,7 @@ App.prototype.Controller = function(app, global) {
         var action = event.target.dataset.appAction,
             id = event.target.closest('[data-app-item-id]').dataset.appItemId;
         // Создаем свое событие о том что у нас есть запрос на изменение/удаление
-        app.service.eventEmmitter.call(app, action, {
+        self.service.eventEmmitter(action, {
             nativeEvent: event,
             id: id
         });
@@ -63,31 +77,34 @@ App.prototype.Controller = function(app, global) {
     }
 
     function formHandler(event) {
+        event.preventDefault();
         var appItem = {
             author: event.target.querySelector('[data-app-input=author]').value,
             pubyear: event.target.querySelector('[data-app-input=pubyear]').value,
             name: event.target.querySelector('[data-app-input=name]').value,
             pagenum: event.target.querySelector('[data-app-input=pagenum]').value,
         };
+        console.log(self);
         // Создаем свое событие о том что у нас есть новые данные 
-        app.service.eventEmmitter.call(app, "create", {
+        self.service.eventEmmitter("createItem", {
             nativeEvent: event,
             appItem: appItem
         });
-        event.preventDefault();
+
     }
-};
+}.call(app);
 
 
-
-App.prototype.Model = function(app, global) {
-    var dataList = [{
-        id: 1,
-        author: "Булгаков М.А.",
-        pubyear: 1966,
-        name: "Мастер и Маргарита",
-        pagenum: 451
-    }];
+App.prototype.Model = function() {
+    var self = this;
+    var dataList = {
+        "a5ol5": {
+            author: "Булгаков М.А.",
+            pubyear: 1966,
+            name: "Мастер и Маргарита",
+            pagenum: 451
+        }
+    };
 
     function getAllItems(argument) {
         return dataList;
@@ -98,25 +115,50 @@ App.prototype.Model = function(app, global) {
     }
 
     function setItem(argument) {
-        var hash = app.service.hash(argument.name);
+        console.log(argument);
+        var id = app.service.createId(argument.name),
+            i;
 
-        for (var i = dataList.length - 1; i >= 0; i--) {
-            if (dataList[i].id == hash) {
-                // Кинуть сообщение что такой элемент уже есть 
-            }
+        if (dataList.id) {
+            console.log(id, argument);
+            return false;
         }
-        dataList.push(argument);
+
+        dataList[id] = argument;
+        console.log(dataList);
+        return id;
     }
-    //Подписываемся на событие CREATE
-    app.container.addEventListener('App:create', function(event) {
+    //Подписываемся на события
+    this.container.addEventListener(this.constructor.name + ':createItem', function(event) {
         console.log(event);
+        var id = setItem(event.detail.appItem);
+        if (id) {
+            self.service.eventEmmitter("createItemSuccess", {
+                successText: "Элемент успешно создан",
+                id: id
+            });
+        } else {
+            self.service.eventEmmitter("createItemError", {
+                errorText: "Такой элемент уже существует",
+                id: id
+            });
+        }
+
     });
-
+    this.container.addEventListener(this.constructor.name + ':readItem', function(event) {
+        console.log(event.type);
+    });
+    this.container.addEventListener(this.constructor.name + ':updateItem', function(event) {
+        console.log(event.type);
+    });
+    this.container.addEventListener(this.constructor.name + ':deleteItem', function(event) {
+        console.log(event.type);
+    });
     return {
-        getItem: getItem,
-        setItem: setItem,
-        getAllItems: getAllItems
+        dataList: dataList
     }
-};
+}.call(app);
 
-App.prototype.View = function() {};
+App.prototype.View = function() {
+
+}.call(app);
