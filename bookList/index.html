@@ -26,48 +26,29 @@
         <div class="row">
             <div class="col-md-3 col-sm-12 col-xs-12">
                 <form data-app-form="editForm">
-                    <div class="alert alert-success" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <div class="alert__message">Элемент успешно добавлен</div>
-                    </div>
-                    <div class="alert alert-danger" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <div class="alert__message">Элемент с таким названием уже существует</div>
+                    <div class="form-group">
+                        <label for="author">Автор (не менее 1 буквы, можно точки, только латиница)</label>
+                        <input type="text" class="form-control" name="author" placeholder="Автор" required pattern="^^[А-Яа-яЁё\s\.]+$">
                     </div>
                     <div class="form-group">
-                        <label for="author">Автор</label>
-                        <input type="text" class="form-control" data-app-input="author" placeholder="Автор">
+                        <label for="pubyear">Год издания (От 1 до 4 цифр)</label>
+                        <input type="text" class="form-control" name="pubyear" placeholder="Год издания" required pattern="[0-9]{1,4}">
                     </div>
                     <div class="form-group">
-                        <label for="pubyear">Год издания</label>
-                        <input type="text" class="form-control" data-app-input="pubyear" placeholder="Год издания">
+                        <label for="name">Название книги (не менее 1 символа)</label>
+                        <input type="text" class="form-control" name="name" placeholder="Название книги" required>
                     </div>
                     <div class="form-group">
-                        <label for="name">Название книги</label>
-                        <input type="text" class="form-control" data-app-input="name" placeholder="Название книги">
+                        <label for="pagenum">Количество страниц (От 1 до 5 цифр)</label>
+                        <input type="text" class="form-control" name="pagenum" placeholder="Количество страниц" required pattern="[0-9]{1,5}">
                     </div>
-                    <div class="form-group">
-                        <label for="pagenum">Количество страниц</label>
-                        <input type="text" class="form-control" data-app-input="pagenum" placeholder="Количество страниц">
-                    </div>
+                    <input type="hidden" name="id">
                     <button type="submit" class="btn btn-success">Сохранить</button>
                     <button type="reset" class="btn btn-warning">Сбросить</button>
                 </form>
             </div>
             <div class="col-md-9">
                 <div class="list-group" data-app-list="bookList">
-                    <div href="javascript:void(0)" class="list-group-item" data-app-item-id="123">
-                        <h4 class="list-group-item-heading">Название книги</h4>
-                        <p class="list-group-item-text">Автор книги</p>
-                        <p>
-                            <a href="javascript:void(0)" class="label label-primary" data-app-action="updateItem">Изменить</a>
-                            <a href="javascript:void(0)" class="label label-danger" data-app-action="deleteItem">Удалить</a>
-                        </p>
-                    </div>
                 </div>
             </div>
         </div>
@@ -77,6 +58,7 @@
     <!-- Assets -->
     <script src="assets/js/jquery-2.2.2.min.js"></script>
     <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/tinytim.min.js"></script>
     <!-- App -->
     <script src="app/app.js"></script>
     <script src="app/init.js"></script>
