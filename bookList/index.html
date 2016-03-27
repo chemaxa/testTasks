@@ -9,7 +9,7 @@
     <title>Booklist test task</title>
     <!-- Bootstrap -->
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -26,6 +26,18 @@
         <div class="row">
             <div class="col-md-3 col-sm-12 col-xs-12">
                 <form data-app-form="editForm">
+                    <div class="alert alert-success" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <div class="alert__message">Элемент успешно добавлен</div>
+                    </div>
+                    <div class="alert alert-danger" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <div class="alert__message">Элемент с таким названием уже существует</div>
+                    </div>
                     <div class="form-group">
                         <label for="author">Автор</label>
                         <input type="text" class="form-control" data-app-input="author" placeholder="Автор">
@@ -62,8 +74,12 @@
     </main>
     <!-- Polyfills -->
     <!-- <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script> -->
+    <!-- Assets -->
+    <script src="assets/js/jquery-2.2.2.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
     <!-- App -->
-    <script src="storage.js"></script>
+    <script src="app/app.js"></script>
+    <script src="app/init.js"></script>
 </body>
 
 </html>
