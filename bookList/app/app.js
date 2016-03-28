@@ -1,7 +1,5 @@
 'use strict';
 /**
- * 
- * @param {Object}  Config - application config
  * App constructor
  */
 var App = function() {
