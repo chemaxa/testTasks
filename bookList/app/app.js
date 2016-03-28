@@ -1,6 +1,4 @@
 'use strict';
-
-
 /**
  * 
  * @param {Object}  Config - application config
@@ -66,7 +64,7 @@ App.prototype.service = function() {
             var hash = 0,
                 i, char;
 
-            if (str.length == 0) return hash;
+            if (str.length === 0) return hash;
             for (i = 0; i < str.length; i++) {
                 char = str.charCodeAt(i);
                 hash = ((hash << 5) - hash) + char;
@@ -74,7 +72,7 @@ App.prototype.service = function() {
             }
             //Convert to string
             return hash.toString(36).slice(2);
-        }
+        };
         /**
          * @param  {string} - Name of application event (create, read, update ...)
          * @param  {any} - Data that will be added to event 
@@ -91,13 +89,13 @@ App.prototype.service = function() {
         createItemFailure: "Элемент c указанными данными уже существует",
         updateItemSuccess: "Элемент успешно обновлен",
         updateItemFailure: "Элемент c указанными данными уже существует",
-    }
+    };
     return {
         createId: createId,
         appError: appError,
         eventEmmitter: eventEmmitter,
         messages: messages
-    }
+    };
 };
 
 
@@ -142,10 +140,9 @@ App.prototype.Model = function() {
     var self = this,
         initiator = "model",
         publisher = "controller",
-        state;
-
-
-    var dataList = {
+        storage=localStorage,
+        dataList;
+    /*var dataList = {
         "26xj": {
             author: "Булгаков М.А.",
             pubyear: "1966",
@@ -153,9 +150,18 @@ App.prototype.Model = function() {
             pagenum: "451",
             id: "26xj"
         }
-    };
+    };*/
+
+    function setToStorage(data) {
+        storage.setItem(self.constructor.name, JSON.stringify(data));
+    }
+
+    function getFromStorage() {
+        return JSON.parse(storage.getItem(self.constructor.name));
+    }
 
     function getAllItems() {
+        dataList = getFromStorage()||{};
         return dataList;
     }
 
@@ -164,13 +170,15 @@ App.prototype.Model = function() {
     }
 
     function createItem(dataItem) {
-        var id = app.service.createId(dataItem.name + dataItem.pubyear + dataItem.author + dataItem.pagenum),
+        var id = self.service.createId(dataItem.name + dataItem.pubyear + dataItem.author + dataItem.pagenum),
             i;
+
         if (!!dataList[id]) {
             return false;
         }
         dataItem.id = id;
         dataList[id] = dataItem;
+        setToStorage(dataList);
         return dataItem;
     }
 
@@ -184,12 +192,14 @@ App.prototype.Model = function() {
 
     function deleteItem(id) {
         delete dataList[id];
+        setToStorage(dataList);
     }
 
     this.container.addEventListener(this.constructor.name + ':App:Init', function(event) {
         var status = "success";
+
         self.service.eventEmmitter(initiator, "readAllItems", {
-            dataList: dataList,
+            dataList: getAllItems(),
             status: status
         });
     });
@@ -248,7 +258,7 @@ App.prototype.Model = function() {
     });
     return {
         dataList: dataList
-    }
+    };
 };
 
 App.prototype.View = function() {
@@ -289,7 +299,7 @@ App.prototype.View = function() {
         var dataList = event.detail.dataList,
             key;
         for (key in dataList) {
-            addItemToHTML(dataList[key])
+            addItemToHTML(dataList[key]);
         }
     }
 
