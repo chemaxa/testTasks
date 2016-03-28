@@ -74,7 +74,7 @@ App.prototype.service = function() {
             return hash.toString(36).slice(2);
         };
         /**
-         * @param  {string} - Name of application event (create, read, update ...)
+         * @param  {string} - Name of application event (createItem, readItem, updateItem ...)
          * @param  {any} - Data that will be added to event 
          */
     var eventEmmitter = function(initiator, name, data) {
@@ -105,20 +105,23 @@ App.prototype.Controller = function() {
 
     this.form.addEventListener('submit', formHandler, false);
     this.list.addEventListener('click', listHandler, false);
-
+/**
+ * @param {object} - browser event object
+*/
     function listHandler(event) {
-
         if (!event.target.dataset.appAction) return;
         var action = event.target.dataset.appAction,
             id = event.target.closest('[data-app-item-id]').dataset.appItemId;
-        // Создаем свое событие о том что у нас есть запрос на изменение/удаление
+
         self.service.eventEmmitter(initiator, action, {
             nativeEvent: event,
             id: id
         });
         event.preventDefault();
     }
-
+/**
+ * @param {object} - browser event object
+*/
     function formHandler(event) {
         event.preventDefault();
         var dataItem = {},
@@ -142,33 +145,37 @@ App.prototype.Model = function() {
         publisher = "controller",
         storage=localStorage,
         dataList;
-    /*var dataList = {
-        "26xj": {
-            author: "Булгаков М.А.",
-            pubyear: "1966",
-            name: "Мастер и Маргарита",
-            pagenum: "451",
-            id: "26xj"
-        }
-    };*/
-
+    
+/**
+ * @param {object} - object with data that should be stored in localStorage
+*/
     function setToStorage(data) {
         storage.setItem(self.constructor.name, JSON.stringify(data));
     }
-
+/**
+ * @return {object} - Object with data from localStorage
+*/
     function getFromStorage() {
         return JSON.parse(storage.getItem(self.constructor.name));
     }
-
+/**
+ * @return {object} - Object with data from localStorage
+*/
     function getAllItems() {
         dataList = getFromStorage()||{};
         return dataList;
     }
-
+/**
+ * @param {string} - id of needed item
+ * @return {object} - Item object from list of storage objects
+*/
     function getItem(id) {
         return dataList[id];
     }
-
+/**
+ * @param {Object} - Object with Item data
+ * @return {object|false} - Item object with id OR false if item with same id is exist
+*/
     function createItem(dataItem) {
         var id = self.service.createId(dataItem.name + dataItem.pubyear + dataItem.author + dataItem.pagenum),
             i;
@@ -181,7 +188,10 @@ App.prototype.Model = function() {
         setToStorage(dataList);
         return dataItem;
     }
-
+/**
+ * @param {Object} - Object with Item data
+ * @return {object|false} - Item object with new id OR false if item with same id is exist
+*/
     function updateItem(dataItem) {
         var previousItemId = dataItem.id;
         var dataItem = createItem(dataItem);
@@ -189,7 +199,9 @@ App.prototype.Model = function() {
         deleteItem(previousItemId);
         return dataItem;
     }
-
+/**
+ * @param {string} - Id of item 
+ */
     function deleteItem(id) {
         delete dataList[id];
         setToStorage(dataList);
@@ -197,7 +209,6 @@ App.prototype.Model = function() {
 
     this.container.addEventListener(this.constructor.name + ':App:Init', function(event) {
         var status = "success";
-
         self.service.eventEmmitter(initiator, "readAllItems", {
             dataList: getAllItems(),
             status: status
@@ -211,20 +222,17 @@ App.prototype.Model = function() {
             dataItem = updateItem(event.detail.dataItem);
             message = (dataItem.id) ? self.service.messages.updateItemSuccess : self.service.messages.updateItemFailure;
             status = (dataItem.id) ? "success" : "failure";
-            console.log(dataList);
             self.service.eventEmmitter(initiator, "updateItem", {
                 dataItem: dataItem,
                 message: message,
                 status: status,
                 previousItemId: previousItemId
             });
-
         } else {
             dataItem = createItem(event.detail.dataItem);
             id = dataItem.id;
             status = (id) ? "success" : "failure";
             message = (id) ? self.service.messages.createItemSuccess : self.service.messages.createItemFailure;
-
             self.service.eventEmmitter(initiator, "createItem", {
                 message: message,
                 dataItem: dataItem,
@@ -256,9 +264,6 @@ App.prototype.Model = function() {
             status: "success"
         });
     });
-    return {
-        dataList: dataList
-    };
 };
 
 App.prototype.View = function() {
@@ -269,7 +274,10 @@ App.prototype.View = function() {
     this.container.addEventListener(this.constructor.name + ':' + publisher + ':editItem', editItemEventHandler);
     this.container.addEventListener(this.constructor.name + ':' + publisher + ':updateItem', updateItemEventHandler);
     this.container.addEventListener(this.constructor.name + ':' + publisher + ':readAllItems', readAllItemsEventHandler);
-
+/**
+ * Set form inputs value from event object
+ * @param {Object} - Object with Event data
+*/            
     function editItemEventHandler(event) {
         var dataItem = event.detail.dataItem,
             inputsArr = self.form.querySelectorAll('input'),
@@ -278,23 +286,31 @@ App.prototype.View = function() {
             inputsArr[i].value = dataItem[inputsArr[i].name];
         }
     }
-
+/**
+ * Update information in HTML of current editing item, set class of message HTML element, set message to message HTML element
+ * @param {Object} - Object with Event data
+*/            
     function updateItemEventHandler(event) {
         var dataItem = event.detail.dataItem;
         var isSuccess = (event.detail.status == "success") ? true : false;
         addMessageToHTML(event.detail.message, isSuccess);
-        console.log(event.detail);
         if (!isSuccess) return;
         updateItem(event.detail, isSuccess);
     }
-
+/**
+ * Update information in HTML element of item by Id
+ * @param {Object} - Object with Item data
+*/
     function updateItem(data) {
         var itemEl = self.list.querySelector('[data-app-item-id="' + data.previousItemId + '"]');
         itemEl.querySelector('[data-app-item-name]').textContent = data.dataItem.name;
         itemEl.querySelector('[data-app-item-author]').textContent = data.dataItem.author;
         itemEl.dataset.appItemId = data.dataItem.id;
     }
-
+/**
+ * Set all items to list
+ * @param {Object} - Object with Event data
+*/
     function readAllItemsEventHandler(event) {
         var dataList = event.detail.dataList,
             key;
@@ -302,13 +318,20 @@ App.prototype.View = function() {
             addItemToHTML(dataList[key]);
         }
     }
-
+/**
+ * Create new item in items list, set text of message HTML element, set class of message HTML element
+ * @param {Object} - Object with Event data
+*/      
     function createItemEventHandler(event) {
         var isSuccess = (event.detail.status == "success") ? true : false;
         addMessageToHTML(event.detail.message, isSuccess);
         if (isSuccess) addItemToHTML(event.detail.dataItem);
     }
-
+/**
+ * Create new message element(if needed), set text of message HTML element, set class of message HTML element
+ * @param message {string} - String with text
+ * @param isSuccess {bool} - status (success or failure)
+*/
     function addMessageToHTML(message, isSuccess) {
         var messageEl = self.container.querySelector("[data-app-message]"),
             messageClassName = isSuccess ? "alert-success" : "alert-danger";
@@ -329,7 +352,10 @@ App.prototype.View = function() {
             $(messageEl).closest(".alert").addClass("alert-danger");
         }
     }
-
+/**
+ * Create new item element in HTML
+ * @param {object} - Object with data of item
+*/
     function addItemToHTML(item) {
         var dataItemHTML = '<div href="javascript:void(0)" class="list-group-item" data-app-item-id="' + item.id + '">' +
             '<h4 class="list-group-item-heading" data-app-item-name>' + item.name + '</h4>' +
@@ -338,7 +364,10 @@ App.prototype.View = function() {
             '<a href="javascript:void(0)" class="label label-danger" data-app-action="deleteItem">Удалить</a></div>';
         self.list.insertAdjacentHTML("afterBegin", dataItemHTML);
     }
-
+/**
+ * Delete item element from HTML
+ * @param {object} - Object with Event data 
+*/
     function deleteItemEventHandler(event) {
         if (event.detail.status == "success")
             $('[data-app-item-id=' + event.detail.dataId + ']').remove();
