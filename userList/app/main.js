@@ -1,25 +1,14 @@
-import model from './model';
-import controller from './controller';
-import view from './view';
+import Model from './model';
+import Controller from './controller';
+import View from './view';
 
 class Main{
   init(){
     console.log('Im Init from App',this);
+    let model = new Model();
+    let controller = new Controller();
+    let view = new View(); 
   }
-  model(){
-    new model().log();
-  }
-  view(){
-    new view().log();
-  }
-  controller(){
-    new controller().log();
-  }
-
 }
-let main = new Main();
-main.init();
-main.model();
-main.controller();
-main.view();
-export default Main;
+new Main().init();
+
