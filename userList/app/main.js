@@ -4,7 +4,7 @@ import view from './view';
 
 class Main{
   init(){
-    console.log('Im Init from App',this)
+    console.log('Im Init from App',this);
   }
   model(){
     new model().log();
