@@ -12,7 +12,15 @@ class Mediator{
     let validator = new Validator();
     let table = new Table();
     let form = new Form();
+    user.log();
+    collection.log();
+    validator.log();
+    table.log();
+    form.log();
   }
 }
-new Main().init();
+new Mediator().init();
 
+if (module.hot) {
+  module.hot.accept();
+}

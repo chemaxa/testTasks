@@ -8,15 +8,15 @@ module.exports = {
     extensions: ['', '.js']
   },
   entry: [
+    './app/main',
     'webpack-dev-server/client?http://localhost:1337',
-    'webpack/hot/only-dev-server',
-    './app/main'
+    'webpack/hot/only-dev-server'
   ],
   output: {
     path: __dirname,
     filename: 'bundle.js',
     publicPath: '/'
-	},
+  },
   plugins: [
     new webpack.HotModuleReplacementPlugin()
   ],
@@ -29,5 +29,6 @@ module.exports = {
         include: path.join(__dirname, '/app')
       }
     ]
-  },
+  }
 };
+
