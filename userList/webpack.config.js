@@ -3,7 +3,7 @@ let path = require('path');
 let webpack = require('webpack');
 
 module.exports = {
-  devtool: 'eval',
+  devtool: 'source-map',
   resolve: {
     extensions: ['', '.js']
   },
@@ -24,9 +24,12 @@ module.exports = {
     loaders: [
       {
         test: /\.js?$/,
-        loader: 'babel?presets[]=es2015',
+        loader: 'babel',
         exclude: /node_modules/,
-        include: path.join(__dirname, '/app')
+        include: path.join(__dirname, '/app'),
+        query: {
+          presets: ['es2015']
+        }
       }
     ]
   }
