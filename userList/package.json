@@ -19,5 +19,17 @@
     "start": "node devserver.js"
   },
   "author": "Maxim Shkarbalyuk",
-  "license": "ISC"
+  "license": "ISC",
+  "babel":{
+    "presets": [ "es2015" ]
+  },
+  "eslintConfig": {
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module"
+    },
+    "rules": {
+      "semi": 2
+    }
+  }
 }
