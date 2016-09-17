@@ -1,7 +1,7 @@
 {
   "name": "userlist",
   "version": "1.0.0",
-  "description": "",
+  "description": "Example application",
   "main": "devserver.js",
   "dependencies": {},
   "devDependencies": {
@@ -9,13 +9,15 @@
     "babel-core": "^6.14.0",
     "babel-loader": "^6.2.5",
     "babel-preset-es2015": "^6.14.0",
+    "chai": "^3.5.0",
+    "mocha": "^3.0.2",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.15.2"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha -u bdd -c --reporter list --compilers js:babel-core/register",
     "start": "node devserver.js"
   },
-  "author": "",
+  "author": "Maxim Shkarbalyuk",
   "license": "ISC"
 }

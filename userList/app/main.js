@@ -1,13 +1,17 @@
-import Model from './model';
-import Controller from './controller';
-import View from './view';
+import Collection from './collection';
+import Form from './form';
+import Table from './table';
+import User from './user';
+import Validator from './validator';
 
-class Main{
+class Mediator{
   init(){
     console.log('Im Init from App',this);
-    let model = new Model();
-    let controller = new Controller();
-    let view = new View(); 
+    let user = new User();
+    let collection = new Collection();
+    let validator = new Validator();
+    let table = new Table();
+    let form = new Form();
   }
 }
 new Main().init();
