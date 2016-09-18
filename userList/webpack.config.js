@@ -5,19 +5,24 @@ let webpack = require('webpack');
 module.exports = {
   devtool: 'source-map',
   resolve: {
-    extensions: ['', '.js']
+    extensions: ['', '.js'],
+    moduleDirectories:['node_modules']
+  },
+  resolveLoader: {
+    extensions: ['', '.js'],
+    moduleDirectories:['node_modules'],
+    moduleTemplates:['*-loader']
   },
   entry: [
-    './app/main',
-    'webpack-dev-server/client?http://localhost:1337',
-    'webpack/hot/only-dev-server'
+    './app/main'
   ],
   output: {
-    path: __dirname,
+    path: __dirname+'/public',
     filename: 'bundle.js',
     publicPath: '/'
   },
   plugins: [
+    new webpack.NoErrorsPlugin(),
     new webpack.HotModuleReplacementPlugin()
   ],
   module: {
@@ -29,9 +34,24 @@ module.exports = {
         include: path.join(__dirname, '/app'),
         query: {
           presets: ['es2015']
-        }
+        },
+        plugins: ['transform-runtime']
       }
     ]
-  }
+  },
+  devServer: {
+    publicPath: '/',
+    hot:true,
+    inline: true,
+    contentBase:'./public',
+    historyApiFallback: true,
+    stats:{
+      colors: true
+    }, 
+    quiet: false,
+    noInfo: false,
+    port: 1337
+  }
 };
+
 
