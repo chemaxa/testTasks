@@ -18,7 +18,7 @@
     "webpack-dev-server": "^1.15.2"
   },
   "scripts": {
-    "test": "mocha -u bdd -c --reporter list --compilers js:babel-core/register",
+    "test": "mocha -u bdd -c --reporter list --compilers js:babel-core/register -w",
     "start": "webpack-dev-server",
     "build": "webpack -p --colors"
   },
