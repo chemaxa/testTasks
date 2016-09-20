@@ -1,6 +1,9 @@
 export default class Collection{
-  log(){
-    let name = 'Collection';
-    console.log(`Im ${name} Log`);
+  setToStorage(data) {
+    storage.setItem(appName, JSON.stringify(data));
+  }
+
+  getFromStorage() {
+    return JSON.parse(storage.getItem(appName));
   }
 }
