@@ -25,9 +25,8 @@ class Mediator {
     this.showNotifications=this.showNotifications.bind(this);
   }
 
-  main() {
-    let {formEl, getDataFromHtml} = this.form;
-    getDataFromHtml.call(this,this.validate);
+  init() {
+    this.form.getDataFromHtml.call(this,this.validate);
   }
 
   validate(data){
@@ -51,16 +50,13 @@ class Mediator {
 }
 
 !(function Main(global) {
-  function init() {
-    let user = new User(),
-      collection = new Collection(),
-      validator = new Validator(),
-      table = new Table(),
-      form = new Form('[data-app-form]');
-    let mediator = new Mediator(user, collection, table, form, validator);
-    mediator.main();
-  }
-  init();
+  let user = new User(),
+    collection = new Collection(),
+    validator = new Validator(),
+    table = new Table(),
+    form = new Form('[data-app-form]');
+  let mediator = new Mediator(user, collection, table, form, validator);
+  mediator.init();
 })(window);
 
 
