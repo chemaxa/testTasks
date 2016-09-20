@@ -23,6 +23,7 @@ class Mediator {
     this.form = form;
     this.validate=this.validate.bind(this);
     this.showNotifications=this.showNotifications.bind(this);
+    this.validateUserModel=this.validateUserModel.bind(this);
   }
 
   init() {
@@ -30,13 +31,31 @@ class Mediator {
   }
 
   validate(data){
+      if(!this.validateUserModel(data))return false;
+        this.addToCollection(data);
+  }
+
+  validateUserModel(data){
     this.validator.validate(data);
     if(this.validator.hasErrors(data)){
       console.error(this.validator.messages.join('\n'));
       this.validator.messages.forEach(this.showNotifications);
+      return false;
     }
+    return data;
   }
 
+  addToCollection(item){
+    if(!this.validateUserModel(item)) return false;
+    console.log('Item is validated: ',item);
+    
+  }
+  updateInCollection(item){
+
+  }
+  deleteFromCollection(id){
+
+  }
   showNotifications(notification){
     console.log(this);
     let messageEl=`
