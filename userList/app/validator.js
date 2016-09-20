@@ -20,7 +20,8 @@ export default class Validator {
       login: "isAlphaNumFrom3",
       password: "isStringFrom8",
       role: "isRole",
-      registered_on: "isDate"
+      registered_on: "isDate",
+      id: "isExist"
     };
     this.messages = [];
     this.config = Object.assign(defaultConfig, config || {});
@@ -64,9 +65,15 @@ export default class Validator {
       validate: (value) => typeof value === 'boolean',
       instructions: "The value must be a Boolean type!"
     };
+    let isExist={
+      validate: (value) => {
+        return !!value;
+      },
+      instructions: "The value should not be null"
+    };
     let isAgeInRange = {
       validate: (age) => {
-        return (18 < age && age < 56);
+        return (17 < age && age < 56);
       },
       instructions: "The age is not included in the range from 18 to 55"
     };
@@ -115,7 +122,8 @@ export default class Validator {
       isAlphaNumFrom3,
       isStringFrom8,
       isRole,
-      isDate
+      isDate,
+      isExist
     };
   }
 
