@@ -20,8 +20,7 @@ export default class Validator {
       login: "isAlphaNumFrom3",
       password: "isStringFrom8",
       role: "isRole",
-      registered_on: "isDate",
-      id: "isExist"
+      registered_on: "isDate"
     };
     this.messages = [];
     this.config = Object.assign(defaultConfig, config || {});

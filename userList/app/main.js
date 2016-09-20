@@ -50,11 +50,11 @@ class Mediator {
   addToCollection(item) {
     if (!this.validateUserModel(item)) return false;
     console.log('Item is validated: ', item);
-    
-  }
-
-  updateInCollection(item) {
-
+    if(this.collection.isExist(item.login)){
+      this.collection.updateItem(item);
+    }else{
+      this.collection.addItem(item);
+    }
   }
 
   deleteFromCollection(id) {
