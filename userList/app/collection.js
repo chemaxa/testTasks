@@ -47,7 +47,9 @@ export default class Collection {
     let tmpArr = [];
     func = func || defaultSort;
     function defaultSort(item1, item2) {
-      return item1['login'] < item2['login'] ? -1 : (item1['login'] > item2['login'] ? 1 : 0);
+      let param1=item1['login'].toLowerCase();
+      let param2=item2['login'].toLowerCase();
+      return param1 < param2 ? -1 : (param1 > param2? 1 : 0);
     }
     
     for (let key in this) {
