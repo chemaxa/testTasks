@@ -32,7 +32,7 @@ export default class Form{
                   dataItem[inputsArr[i].name] = inputsArr[i].value;
                 break;
             }
-            // Only for debuggin!!!!
+            // Only for debugg!!!! Remove comments
             //inputsArr[i].value = '';
         }
         cb(dataItem);
