@@ -88,5 +88,5 @@ describe('Collection methods forEach, sort(default by login), map.', () => {
       assert.equal(collection._elems[key]['first_name'],'tested', 'the name of items is not a "tested"');
     }
   });
-  
+  //TODO: write test for Sort method!
 });
