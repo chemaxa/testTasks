@@ -67,6 +67,7 @@ describe('Collection', () => {
 describe('Collection methods forEach, sort(default by login), map.', () => {
   before(() => {
     // runs before all tests in this block
+    mockUpdatedUser.login='alphabet';
     collection.addItem(mockUpdatedUser);
   });
   
@@ -88,5 +89,20 @@ describe('Collection methods forEach, sort(default by login), map.', () => {
       assert.equal(collection._elems[key]['first_name'],'tested', 'the name of items is not a "tested"');
     }
   });
-  //TODO: write test for Sort method!
+  
+  it(`Sort collections method, receive Function for compare collection items, must return new sorted collection, 
+    if function not provided, collection would be sorted by Login`, () => {
+    log.info('Before sort: ',collection._elems);
+    let sorted = collection.sort();
+    log.info('After sort: ',sorted);
+    let i=0;
+    let previous='';
+    for(let key in collection._elems){
+      if(i){
+        assert.isAbove(previous,collection._elems[key]['login'], 'the login of previous item is not above the login of next item');
+      }
+      previous=sorted[key]['login'];
+      i++;
+    }
+  });
 });
