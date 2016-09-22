@@ -49,6 +49,7 @@ export default class Validator {
 
         if (!success) {
           msg = `Invalid value for * ${i} *, ${checker.instructions}`;
+          
           this.messages.push(msg);
         }
       }
@@ -62,7 +63,7 @@ export default class Validator {
   types() {
     let isBool = {
       validate: (value) => typeof value === 'boolean',
-      instructions: "The value must be a Boolean type!"
+      instructions: "The value must be a Boolean type"
     };
     let isExist={
       validate: (value) => {
@@ -86,19 +87,19 @@ export default class Validator {
       validate: (value) => {
         return (typeof value == "string") && (3 < value.length && value.length < 25);
       },
-      instructions: "The string should contain from 3 to 15 symbols"
+      instructions: "The string should contain from 3 to 25 symbols"
     };
     let isAlphaNumFrom3 = {
       validate: (value) => {
         return /^[a-z0-9_-]{3,}$/g.test(value);
       },
-      instructions: "The string should contain from 3 to 15 symbols"
+      instructions: "The string should contain minimum 3 symbols"
     };
     let isStringFrom8 = {
       validate: (value) => {
         return (typeof value == 'string') && (value.length > 7);
       },
-      instructions: "The string should contain minimum 8 sumbols"
+      instructions: "The string should contain minimum 8 symbols"
     };
     let isRole = {
       validate: (value) => {
