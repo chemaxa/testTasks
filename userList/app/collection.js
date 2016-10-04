@@ -1,17 +1,20 @@
 import config from './config';
 //let storage=localStorage;
-let {appName,storage}=config;
+let {
+  appName,
+  storage
+} = config;
 
-let log =console.log; 
+let log = console.log;
 /*  forEach — простой обход сохранённых в коллекцию моделей
 2. map — обход с возвратом обработанных значений
 3. sort — сортировка моделей передаваемой функцией или по полю
 login, если функция не задана*/
 export default class Collection {
-  constructor(callback) {
-    this._elems=this.getFromStorage();
+  constructor() {
+    this._elems = this.getFromStorage();
     let
-      obj=this,
+      obj = this,
       prop = '_elems',
       oldValue = this.getFromStorage(),
       newValue = oldValue,
@@ -22,32 +25,33 @@ export default class Collection {
         oldValue = newValue;
         newValue = value;
         this.setToStorage(value);
-        console.log('SETTER WAS CALLED!', newValue);
-        //callback.call(obj, 'CB: ', prop, oldValue, newValue);
+        //console.log('SETTER WAS CALLED!', newValue);
       };
 
-      Object.defineProperty(obj, prop, {
-        get: getter,
-        set: setter,
-        configurable: true
-      });
-
-  }
-    getFromStorage() {
-      return  JSON.parse(storage.getItem(appName)) || {};
-    }
-   setToStorage(data) {
-      storage.setItem(appName, JSON.stringify(data));
-    }
-
-  isExist(login){
-    return !!this['_elems'][item['login']]; 
+    Object.defineProperty(obj, prop, {
+      get: getter,
+      set: setter,
+      configurable: true
+    });
   }
 
+  getFromStorage() {
+    return JSON.parse(storage.getItem(appName)) || {};
+  }
+
+  setToStorage(data) {
+    storage.setItem(appName, JSON.stringify(data));
+  }
+
+  isExist(login) {
+    return !!this['_elems']['login'];
+  }
 
   addItem(item) {
     let login = item['login'];
-    this['_elems'] = Object.assign(this['_elems'],this['_elems'],{[login]:item});
+    this['_elems'] = Object.assign(this['_elems'], this['_elems'], {
+      [login]: item
+    });
     return item;
   }
 
@@ -57,7 +61,7 @@ export default class Collection {
 
   updateItem(newItem) {
 
-    let oldItem = this._elems[newItem['login']];
+    let oldItem = this['_elems'][newItem['login']];
 
     if (!oldItem)
       return 'Item with this login is not exist!';
@@ -67,15 +71,19 @@ export default class Collection {
         oldItem[key] = newItem[key];
     }
 
-    return this._elems[newItem['login']];
+    this['_elems'] = Object.assign(this['_elems'], this['_elems']);
+
+    return this['_elems'][newItem['login']];
   }
 
   deleteItem(item) {
-    return delete this._elems[item['login']];
+    let result = delete this['_elems'][item['login']];
+    this['_elems'] = Object.assign(this['_elems'], this['_elems']);
+    return result;
   }
 
   forEach(func, thisArg) {
-    thisArg = thisArg || this._elems;
+    thisArg = thisArg || this['_elems'];
     for (let key in thisArg) {
       if (thisArg.hasOwnProperty(key))
         func.call(thisArg, thisArg[key], key, thisArg);
@@ -83,7 +91,7 @@ export default class Collection {
   }
 
   map(func, thisArg) {
-    thisArg = thisArg || this._elems;
+    thisArg = thisArg || this['_elems'];
     let result = {};
     for (let key in thisArg) {
       if (thisArg.hasOwnProperty(key))
@@ -103,9 +111,9 @@ export default class Collection {
       return param1 < param2 ? -1 : (param1 > param2 ? 1 : 0);
     }
 
-    for (let key in this._elems) {
-      if (this._elems.hasOwnProperty(key)) {
-        tmpArr.push(this._elems[key]);
+    for (let key in this['_elems']) {
+      if (this['_elems'].hasOwnProperty(key)) {
+        tmpArr.push(this['_elems'][key]);
       }
     }
 
