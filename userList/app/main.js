@@ -41,7 +41,9 @@ class Mediator {
     this.validator.validate(data);
     if (this.validator.hasErrors(data)) {
       console.error(this.validator.messages.join('\n'));
-      this.validator.messages.forEach(this.showNotifications);
+      for(let i=0;i<this.validator.messages.length;i++){
+        this.showNotifications(this.validator.messages[i],'danger');
+      }
       return false;
     }
     return data;
@@ -50,13 +52,19 @@ class Mediator {
   addToCollection(item) {
     if (!this.validateUserModel(item)) return false;
     console.log('Item is validated: ', item);
+    let result;
     if(this.collection.isExist(item.login)){
-      this.collection.updateItem(item);
-      console.info(`Item with login '${item.login}' was updated `);
+      result = this.collection.updateItem(item);
+      let notification = `Item with login '${item.login}' was updated `;
+      this.showNotifications(notification,'success');
+      console.info(notification);
     }else{
-      this.collection.addItem(item);
-      console.info(`Item with login '${item.login}' was added `);
+      result = this.collection.addItem(item);
+      let notification = `Item with login '${item.login}' was added `;
+      this.showNotifications(notification,'success');
+      console.info(notification);
     }
+    return result;
   }
 
   deleteFromCollection(item) {
@@ -64,11 +72,12 @@ class Mediator {
     return false;
   }
 
-  showNotifications(notification) {
+  showNotifications(notification,theme) {
+    theme=theme||'warning';
     let messageEl = `
-      <div class="alert alert-danger alert-dismissible" role="alert">
+      <div class="alert alert-${theme} alert-dismissible" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <strong>Error!</strong> ${notification}
+          <strong>${theme == 'danger' ? 'Error!' : ''}</strong> ${notification}
       </div>`;
     let {formEl} = this.form;
     formEl.insertAdjacentHTML("afterBegin", messageEl);
