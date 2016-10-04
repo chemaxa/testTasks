@@ -48,6 +48,16 @@ describe('Collection', () => {
     });
   });
 
+  describe('Exist item in collection', () => {
+    it('Success must return true', () => {
+      assert.isTrue(collection.isExist(mockValidUser['login']), 'the returned value is not False');
+    });
+
+    it('Fail must return false', () => {
+      assert.isFalse(collection.isExist('test'), 'the returned value is not False');
+    });
+  });
+
   describe('Update item in collection', () => {
     it('Success must return added object', () => {
       assert.deepEqual(collection.updateItem(mockUpdatedUser), mockUpdatedUser, 'the objects is not equals');
