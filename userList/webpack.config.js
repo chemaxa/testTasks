@@ -39,6 +39,9 @@ module.exports = {
       }
     ]
   },
+  node: {
+    fs: "empty"
+  },
   devServer: {
     publicPath: '/',
     hot:true,

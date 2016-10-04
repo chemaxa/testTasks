@@ -1,9 +1,9 @@
 import Collection from '../app/collection';
 import {assert} from 'chai';
-import {getLogger} from 'log4js';
-let log = getLogger();
 
-let collection = new Collection();
+import {getLogger} from 'log4js';
+let  logger = getLogger();
+let collection = new Collection(logger);
 let mockValidUser = {
   first_name: "FirstName",
   last_name: "LastName",
@@ -92,9 +92,7 @@ describe('Collection methods forEach, sort(default by login), map.', () => {
   
   it(`Sort collections method, receive Function for compare collection items, must return new sorted collection, 
     if function not provided, collection would be sorted by Login`, () => {
-    log.info('Before sort: ',collection._elems);
     let sorted = collection.sort();
-    log.info('After sort: ',sorted);
     let i=0;
     let previous='';
     for(let key in collection._elems){
