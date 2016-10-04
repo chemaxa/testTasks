@@ -124,6 +124,4 @@ export default class Collection {
 
     return result;
   }
-
-
 }

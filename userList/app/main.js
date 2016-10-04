@@ -52,8 +52,10 @@ class Mediator {
     console.log('Item is validated: ', item);
     if(this.collection.isExist(item.login)){
       this.collection.updateItem(item);
+      console.info(`Item with login '${item.login}' was updated `);
     }else{
       this.collection.addItem(item);
+      console.info(`Item with login '${item.login}' was added `);
     }
   }
 
