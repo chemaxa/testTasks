@@ -41,14 +41,14 @@
                 <form data-app-form="editForm">
                     <div class="form-group">
                         <label for="first_name">Имя (от 3 до 15 букв)</label>
-                        <input value="123123" type="text" class="form-control" name="first_name" placeholder="Имя" required  >
+                        <input value="123123" type="text" class="form-control" name="first_name" placeholder="Имя" required>
                     </div>
                     <div class="form-group">
                         <label for="last_name">Фамилия (от 3 до 25 букв)</label>
-                        <input value="123123" type="text" class="form-control" name="last_name" placeholder="Фамилия" required >
+                        <input value="123123" type="text" class="form-control" name="last_name" placeholder="Фамилия" required>
                     </div>
                     <div class="form-group">
-                        <label >Активный
+                        <label>Активный
                             <input type="checkbox" name="active" >
                         </label>
                     </div>
@@ -79,8 +79,30 @@
                 </form>
             </div>
             <div class="col-md-9 col-sm-12 col-xs-12">
-                <div class="list-group userList" data-app-list="userList">
-                </div>
+                <table class="table table-hover" data-app-list="userList">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Role</th>
+                            <th>Login</th>
+                            <th>Full Name</th>
+                            <th>Age</th>
+                            <th>Registered on</th>
+                            <th>Active</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>Administartor</td>
+                            <td>Otto</td>
+                            <td>Otto Shmidt</td>
+                            <td>27</td>
+                            <td>19.06.2016</td>
+                            <td>Yes</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </main>
@@ -91,7 +113,7 @@
     <script src="assets/js/bootstrap.min.js"></script>
     <!-- App -->
     <script src="bundle.js"></script>
-    
+
 </body>
 
 </html>
