@@ -63,9 +63,6 @@ export default class Collection {
 
     let oldItem = this['_elems'][newItem['login']];
 
-    if (!oldItem)
-      return 'Item with this login is not exist!';
-
     for (let key in oldItem) {
       if (oldItem.hasOwnProperty(key))
         oldItem[key] = newItem[key];

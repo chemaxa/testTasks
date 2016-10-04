@@ -53,10 +53,6 @@ describe('Collection', () => {
       assert.deepEqual(collection.updateItem(mockUpdatedUser), mockUpdatedUser, 'the objects is not equals');
     });
 
-    it('fail update item in collection, must return String with error', () => {
-      mockUpdatedUser.login = 'test';
-      assert.isString(collection.updateItem(mockUpdatedUser), 'the returned value is not string');
-    });
   });
 
   describe('Delete item in collection', () => {
