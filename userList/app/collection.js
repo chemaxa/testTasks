@@ -5,7 +5,7 @@ let {
   storage
 } = config;
 
-let log = console.log;
+let log = console;
 /*  forEach — простой обход сохранённых в коллекцию моделей
 2. map — обход с возвратом обработанных значений
 3. sort — сортировка моделей передаваемой функцией или по полю
@@ -44,7 +44,7 @@ export default class Collection {
   }
 
   isExist(login) {
-    return !!this['_elems']['login'];
+    return !!this['_elems'][login];
   }
 
   addItem(item) {
