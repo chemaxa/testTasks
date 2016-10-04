@@ -6,7 +6,6 @@ if (typeof localStorage === "undefined" || localStorage === null) {
   let collection={};
   config.storage={
       getItem:function(key){
-        console.log('KEY: ',key);
         let data = collection[key] || {};
         return JSON.stringify(data);
       },
@@ -15,7 +14,9 @@ if (typeof localStorage === "undefined" || localStorage === null) {
       }
   };
 
-  console.log('Run on Node', config.storage);
+  console.warn(`WARNING!
+   LocalStorage is emulated!
+    Run on Node Environment!`);
   
 }else{
   config.storage=localStorage;
