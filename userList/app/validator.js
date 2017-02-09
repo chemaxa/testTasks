@@ -13,15 +13,40 @@ registered_on — тип number, таймстемп времени создан�
 export default class Validator {
   constructor(config) {
     let defaultConfig = {
-      first_name: "isString3to15",
-      last_name: "isString3to25",
-      active: "isBool",
-      age: "isAgeInRange",
-      login: "isAlphaNumFrom3",
-      password: "isStringFrom8",
-      role: "isRole",
-      registered_on: "isDate"
+      first_name: {
+        type: "isString3to15",
+        instruction: "The string should contain from 3 to 15 symbols"
+      },
+      last_name: {
+        type: "isString3to25",
+        instruction: "The string should contain from 3 to 25 symbols"
+      },
+      active: {
+        type:"isBool",
+        instruction: "The value must be a Boolean type"
+      },
+      age: {
+        type: "isAgeInRange",
+        instructions: "The age is not included in the range from 18 to 55"
+      },
+      login: {
+        type:"isAlphaNumFrom3",
+        instruction: "The string should contain minimum 3 symbols"
+      },
+      password: {
+        type: "isStringFrom8",
+        instruction: "The string should contain minimum 8 symbols"
+      },
+      role: {
+        type:"isRole",
+        instruction: "The value should be in range from 1 to 4"
+      },
+      registered_on: {
+        type:"isDate",
+        instruction: "The value should be a date"
+      }
     };
+    
     this.messages = [];
     this.config = Object.assign(defaultConfig, config || {});
     this.types = this.types.call(this);
@@ -31,8 +56,9 @@ export default class Validator {
     let i, msg, type, checker, success;
     this.messages = [];
     for (i in data) {
-      if (data.hasOwnProperty(i)) {
-        type = this.config[i];
+      debugger;  
+      if (data.hasOwnProperty(i) && this.config.hasOwnProperty(i)) {
+        type = this.config[i]['type'];
         checker = this.types[type];
         if (!type) {
           continue;
@@ -46,9 +72,9 @@ export default class Validator {
         }
 
         success = checker.validate(data[i]);
-
+        
         if (!success) {
-          msg = `Invalid value for * ${i} *, ${checker.instructions}`;
+          msg = `Invalid value for * ${i} *, ${this.config[i]['instruction']}`;
           
           this.messages.push(msg);
         }
@@ -62,8 +88,7 @@ export default class Validator {
 
   types() {
     let isBool = {
-      validate: (value) => typeof value === 'boolean',
-      instructions: "The value must be a Boolean type"
+      validate: (value) => typeof value === 'boolean'
     };
     let isExist={
       validate: (value) => {
@@ -74,45 +99,39 @@ export default class Validator {
     let isAgeInRange = {
       validate: (age) => {
         return (17 < age && age < 56);
-      },
-      instructions: "The age is not included in the range from 18 to 55"
+      }
     };
     let isString3to15 = {
       validate: (value) => {
         return (typeof value == "string") && (3 < value.length && value.length < 15);
-      },
-      instructions: "The string should contain from 3 to 15 symbols"
+      }
     };
     let isString3to25 = {
       validate: (value) => {
         return (typeof value == "string") && (3 < value.length && value.length < 25);
       },
-      instructions: "The string should contain from 3 to 25 symbols"
+      
     };
     let isAlphaNumFrom3 = {
       validate: (value) => {
         return /^[a-z0-9_-]{3,}$/g.test(value);
-      },
-      instructions: "The string should contain minimum 3 symbols"
+      }
     };
     let isStringFrom8 = {
       validate: (value) => {
         return (typeof value == 'string') && (value.length > 7);
-      },
-      instructions: "The string should contain minimum 8 symbols"
+      }
     };
     let isRole = {
       validate: (value) => {
         return (0 < value) && (value < 5);
-      },
-      instructions: "The value should be in range from 1 to 4"
+      }
     };
     let isDate = {
       validate: (value) => {
         let toString = Object.prototype.toString;
         return toString.call(value) == '[object Date]';
-      },
-      instructions: "The value should be a date"
+      }
     };
     return {
       isString3to15,
