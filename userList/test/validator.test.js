@@ -1,6 +1,40 @@
 import Validator from '../app/validator';
-import {assert} from 'chai';
-let validator = new Validator();
+import { assert } from 'chai';
+let defaultValidatorConfig = {
+  first_name: {
+    type: "isString3to15",
+    instruction: "The string should contain from 3 to 15 symbols"
+  },
+  last_name: {
+    type: "isString3to25",
+    instruction: "The string should contain from 3 to 25 symbols"
+  },
+  active: {
+    type: "isBool",
+    instruction: "The value must be a Boolean type"
+  },
+  age: {
+    type: "isAgeInRange",
+    instructions: "The age is not included in the range from 18 to 55"
+  },
+  login: {
+    type: "isAlphaNumFrom3",
+    instruction: "The string should contain minimum 3 symbols"
+  },
+  password: {
+    type: "isStringFrom8",
+    instruction: "The string should contain minimum 8 symbols"
+  },
+  role: {
+    type: "isRole",
+    instruction: "The value should be in range from 1 to 4"
+  },
+  registered_on: {
+    type: "isDate",
+    instruction: "The value should be a date"
+  }
+};
+let validator = new Validator(defaultValidatorConfig);
 
 /*
 first_name — тип string, от 3 до 15 символов
@@ -35,50 +69,32 @@ let mockInvalidUser = {
 };
 
 describe('Validator', () => {
-  it('validate Valid User, has not errors', () => {
+  it('validate Valid User, should not has errors', () => {
     validator.validate(mockValidUser);
     if (validator.hasErrors()) {
       console.error(validator.messages.join("\n"));
     }
-    assert.isFalse(validator.hasErrors(), 'validation should has not errors');
-
+    assert.isFalse(validator.hasErrors(), 'validation should not has errors');
   });
 
-  let patterns = [
-    { name:"first_name",
-      message: "The string should contain from 3 to 15 symbols"},
-    { name:"last_name",
-      message: "The string should contain from 3 to 25 symbols"},
-    { name: "active",
-      message: "The value must be a Boolean type"},
-    { name: "age",
-      message: "The age is not included in the range from 18 to 55"},
-    { name: "login",
-      message:"The string should contain minimum 3 symbols"},
-    { name:"password",
-      message:"The string should contain minimum 8 symbols"},
-    { name:"role",
-      message: "The value should be in range from 1 to 4"},
-    { name:"registered_on",
-      message:"The value should be a date"},
-  ];
+  it('validate InValid User, should has errors', () => {
+    validator.validate(mockInvalidUser);
 
+    let msg = validator.messages.slice();
 
-  validator.validate(mockInvalidUser);
-  
-  let msg = validator.messages.slice();
-  patterns.forEach(checker);
-  
-  function checker(pattern){
-    it(`validate ${pattern.name}, has error `, () =>{
-        
-        let check= (item)=>{
-          return !!~item.indexOf(pattern.message);
-        };
-        
-        assert.isTrue(msg.some(check),`validation should has instruction @${pattern.message}@ '\n' However exist '\n' ${msg.join('\n')}`);
-         
-    });
-  }
+    for (let i in defaultValidatorConfig) {
+      if(defaultValidatorConfig.hasOwnProperty(i)){
+        it(`validate ${i}, has error `, () => {
 
+          let check = (item) => {
+            return !!~item.indexOf(i['instruction']);
+          };
+
+          assert.isTrue(msg.some(check), `validation should has instruction @${i['instruction']}@ '\n' However exist '\n' ${msg.join('\n')}`);
+
+        });
+      }
+      
+    }
+  });
 });
