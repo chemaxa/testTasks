@@ -5,7 +5,6 @@ let {
   storage
 } = config;
 
-let log = console;
 /*  forEach — простой обход сохранённых в коллекцию моделей
 2. map — обход с возвратом обработанных значений
 3. sort — сортировка моделей передаваемой функцией или по полю
@@ -60,16 +59,12 @@ export default class Collection {
   }
 
   updateItem(newItem) {
-
     let oldItem = this['_elems'][newItem['login']];
-
     for (let key in oldItem) {
       if (oldItem.hasOwnProperty(key))
         oldItem[key] = newItem[key];
     }
-
     this['_elems'] = Object.assign(this['_elems'], this['_elems']);
-
     return this['_elems'][newItem['login']];
   }
 
@@ -101,27 +96,22 @@ export default class Collection {
     let result = {};
     let tmpArr = [];
     func = func || defaultSort;
-
     function defaultSort(item1, item2) {
       let param1 = item1['login'].toLowerCase();
       let param2 = item2['login'].toLowerCase();
       return param1 < param2 ? -1 : (param1 > param2 ? 1 : 0);
     }
-
     for (let key in this['_elems']) {
       if (this['_elems'].hasOwnProperty(key)) {
         tmpArr.push(this['_elems'][key]);
       }
     }
-
     tmpArr.sort(func);
-
     tmpArr.forEach(
       (item) => {
         result[item['login']] = item;
       }
     );
-
     return result;
   }
 }

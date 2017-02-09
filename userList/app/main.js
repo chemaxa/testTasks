@@ -3,18 +3,17 @@ import Form from './form';
 import Table from './table';
 import User from './user';
 import Validator from './validator';
-import {appName,storage} from './config';
 
-let mockUser = {
-  first_name: "FirstName", //-
-  last_name: "LastName",  // -
-  active: true, //-
-  age: 55, //-
-  login: "login", //-
-  password: "password", //-
-  role: 1, //+
-  registered_on: new Date() //-
-};
+// let mockUser = {
+//   first_name: "FirstName", //-
+//   last_name: "LastName",  // -
+//   active: true, //-
+//   age: 55, //-
+//   login: "login", //-
+//   password: "password", //-
+//   role: 1, //+
+//   registered_on: new Date() //-
+// };
 
 class Mediator {
   constructor(user, collection, table, form, validator) {
@@ -41,8 +40,8 @@ class Mediator {
     this.validator.validate(data);
     if (this.validator.hasErrors(data)) {
       console.error(this.validator.messages.join('\n'));
-      for(let i=0;i<this.validator.messages.length;i++){
-        this.showNotifications(this.validator.messages[i],'danger');
+      for (let i = 0; i < this.validator.messages.length; i++) {
+        this.showNotifications(this.validator.messages[i], 'danger');
       }
       return false;
     }
@@ -53,28 +52,32 @@ class Mediator {
     if (!this.validateUserModel(item)) return false;
     console.log('Item is validated: ', item);
     let result;
-    if(this.collection.isExist(item.login)){
+    if (this.collection.isExist(item.login)) {
       result = this.collection.updateItem(item);
       let notification = `Item with login '${item.login}' was updated `;
-      this.showNotifications(notification,'success');
+      this.showNotifications(notification, 'success');
       console.info(notification);
-    }else{
+    } else {
       result = this.collection.addItem(item);
       let notification = `Item with login '${item.login}' was added `;
-      this.showNotifications(notification,'success');
+      this.showNotifications(notification, 'success');
       console.info(notification);
     }
-    this.collection.forEach(console.info);
+    console.log('Table: \n');
+    this.table.add(item);
     return result;
   }
 
   deleteFromCollection(item) {
     //TODO: create realisation ...
+    if (this.collection.isExist(item.login)) {
+      console.log(item);
+    }
     return false;
   }
 
-  showNotifications(notification,theme) {
-    theme=theme||'warning';
+  showNotifications(notification, theme) {
+    theme = theme || 'warning';
     let messageEl = `
       <div class="alert alert-${theme} alert-dismissible" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -89,7 +92,7 @@ class Mediator {
   let user = new User(),
     collection = new Collection(),
     validator = new Validator(),
-    table = new Table(),
+    table = new Table('[data-app-list]',collection),
     form = new Form('[data-app-form]');
 
   let mediator = new Mediator(user, collection, table, form, validator);
