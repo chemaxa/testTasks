@@ -56,7 +56,6 @@ export default class Validator {
     let i, msg, type, checker, success;
     this.messages = [];
     for (i in data) {
-      debugger;  
       if (data.hasOwnProperty(i) && this.config.hasOwnProperty(i)) {
         type = this.config[i]['type'];
         checker = this.types[type];
