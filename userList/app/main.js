@@ -64,6 +64,7 @@ class Mediator {
       this.showNotifications(notification,'success');
       console.info(notification);
     }
+    this.collection.forEach(console.info);
     return result;
   }
 
