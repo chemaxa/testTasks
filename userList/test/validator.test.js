@@ -85,16 +85,12 @@ describe('Validator', () => {
     for (let i in defaultValidatorConfig) {
       if(defaultValidatorConfig.hasOwnProperty(i)){
         it(`validate ${i}, has error `, () => {
-
           let check = (item) => {
             return !!~item.indexOf(i['instruction']);
           };
-
           assert.isTrue(msg.some(check), `validation should has instruction @${i['instruction']}@ '\n' However exist '\n' ${msg.join('\n')}`);
-
         });
       }
-      
     }
   });
 });
