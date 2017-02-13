@@ -44,7 +44,6 @@ class Mediator {
 
   addToCollection(item) {
     if (!item.isValid) return false;
-    console.log('Item is validated: ', item);
     let result;
     if (this.collection.isExist(item.login)) {
       result = this.collection.updateItem(item);
@@ -53,7 +52,7 @@ class Mediator {
       result = this.collection.addItem(item);
       this.notificator.showNotification('add', item, 'success');
     }
-    this.table.add(item);
+    this.table.add(result);
     return result;
   }
 
