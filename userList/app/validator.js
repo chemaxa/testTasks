@@ -40,10 +40,6 @@ export default class Validator {
       role: {
         type:"isRole",
         instruction: "The value should be in range from 1 to 4"
-      },
-      registered_on: {
-        type:"isDate",
-        instruction: "The value should be a date"
       }
     };
     
@@ -58,6 +54,7 @@ export default class Validator {
     for (i in data) {
       if (data.hasOwnProperty(i) && this.config.hasOwnProperty(i)) {
         type = this.config[i]['type'];
+        console.log(type);
         checker = this.types[type];
         if (!type) {
           continue;
