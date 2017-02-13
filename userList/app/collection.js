@@ -84,7 +84,7 @@ export default class Collection {
     thisArg = thisArg || this['_elems'];
     for (let key in thisArg) {
       if (thisArg.hasOwnProperty(key))
-        func.call(thisArg, thisArg[key], key, thisArg);
+        func.call(thisArg, key, thisArg[key], thisArg);
     }
   }
 
@@ -93,7 +93,7 @@ export default class Collection {
     let result = {};
     for (let key in thisArg) {
       if (thisArg.hasOwnProperty(key))
-        result[key] = func.call(thisArg, thisArg[key], key, thisArg);
+        result[key] = func.call(thisArg, key, thisArg[key],  thisArg);
     }
     return result;
   }
