@@ -48,6 +48,9 @@ export default class Collection {
 
   addItem(item) {
     let login = item['login'];
+    item.registered_on=Date.now();
+    item.age = Number(item.age);
+    item.role = Number(item.role);
     this['_elems'] = Object.assign(this['_elems'], this['_elems'], {
       [login]: item
     });
@@ -60,6 +63,9 @@ export default class Collection {
 
   updateItem(newItem) {
     let oldItem = this['_elems'][newItem['login']];
+    newItem.age = Number(newItem.age);
+    newItem.role = Number(newItem.role);
+    newItem.registered_on=oldItem.registered_on;
     for (let key in oldItem) {
       if (oldItem.hasOwnProperty(key))
         oldItem[key] = newItem[key];
