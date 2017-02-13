@@ -1,7 +1,7 @@
 import Collection from './collection';
 import Form from './form';
 import Table from './table';
-import User from './user';
+import Notificator from './notificator';
 import Validator from './validator';
 
 // let mockUser = {
@@ -16,14 +16,13 @@ import Validator from './validator';
 // };
 
 class Mediator {
-  constructor(user, collection, table, form, validator) {
-    this.user = user;
+  constructor(collection, table, form, validator,notificator) {
     this.collection = collection;
     this.validator = validator;
     this.table = table;
     this.form = form;
+    this.notificator = notificator;
     this.validate = this.validate.bind(this);
-    this.showNotifications = this.showNotifications.bind(this);
     this.validateUserModel = this.validateUserModel.bind(this);
   }
 
@@ -41,7 +40,7 @@ class Mediator {
     if (this.validator.hasErrors(data)) {
       console.error(this.validator.messages.join('\n'));
       for (let i = 0; i < this.validator.messages.length; i++) {
-        this.showNotifications(this.validator.messages[i], 'danger');
+        this.notificator.showNotifications(this.validator.messages[i], item, 'danger');
       }
       return false;
     }
@@ -54,16 +53,11 @@ class Mediator {
     let result;
     if (this.collection.isExist(item.login)) {
       result = this.collection.updateItem(item);
-      let notification = `Item with login '${item.login}' was updated `;
-      this.showNotifications(notification, 'success');
-      console.info(notification);
+      this.notificator.showNotifications('update', item, 'success');
     } else {
       result = this.collection.addItem(item);
-      let notification = `Item with login '${item.login}' was added `;
-      this.showNotifications(notification, 'success');
-      console.info(notification);
+      this.notificator.showNotifications('add', item, 'success');
     }
-    console.log('Table: \n');
     this.table.add(item);
     return result;
   }
@@ -71,31 +65,19 @@ class Mediator {
   deleteFromCollection(item) {
     //TODO: create realisation ...
     if (this.collection.isExist(item.login)) {
-      console.log(item);
+      console.log('Deleted: ',item);
     }
     return false;
-  }
-
-  showNotifications(notification, theme) {
-    theme = theme || 'warning';
-    let messageEl = `
-      <div class="alert alert-${theme} alert-dismissible" role="alert">
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <strong>${theme == 'danger' ? 'Error!' : ''}</strong> ${notification}
-      </div>`;
-    let {formEl} = this.form;
-    formEl.insertAdjacentHTML("afterBegin", messageEl);
   }
 }
 
 !(function Main(global) {
-  let user = new User(),
-    collection = new Collection(),
+  let collection = new Collection(),
     validator = new Validator(),
     table = new Table('[data-app-list]',collection),
-    form = new Form('[data-app-form]');
-
-  let mediator = new Mediator(user, collection, table, form, validator);
+    form = new Form('[data-app-form]'),
+    notificator = new Notificator(form);
+  let mediator = new Mediator(collection, table, form, validator,notificator);
   mediator.init();
 })(window);
 
