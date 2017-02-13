@@ -27,6 +27,7 @@ class Mediator {
 
   init() {
     this.form.getDataFromHtml.call(this, this.validate);
+    this.table.init();
   }
 
   validate(data) {
@@ -48,11 +49,13 @@ class Mediator {
     if (this.collection.isExist(item.login)) {
       result = this.collection.updateItem(item);
       this.notificator.showNotification('update', item, 'success');
+      this.table.update(result);
     } else {
       result = this.collection.addItem(item);
       this.notificator.showNotification('add', item, 'success');
+      this.table.add(result);
     }
-    this.table.add(result);
+    
     return result;
   }
 
