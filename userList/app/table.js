@@ -19,13 +19,14 @@ export default class Table {
     // 4. **Age** — сортируемое
     // 5. **Registered on** — сортируемое
     // 6. **Active** — в формате Yes/No
+    let regDate = new Date(user.registered_on);
     $(this.tableEl).find('tbody').append(
       `<tr>
           <td>${user.role}</td>
           <td>${user.login}</td>
           <td>${user.first_name} ${user.last_name}</td>
           <td>${user.age}</td>
-          <td>${user.registered_on}</td>
+          <td>${regDate.getDate()} / ${regDate.getMonth()} / ${regDate.getFullYear()}</td>
           <td>${user.active}</td>
       </tr>`
     );
