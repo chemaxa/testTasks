@@ -23,7 +23,6 @@ class Mediator {
     this.form = form;
     this.notificator = notificator;
     this.validate = this.validate.bind(this);
-    this.validateUserModel = this.validateUserModel.bind(this);
   }
 
   init() {
@@ -31,32 +30,28 @@ class Mediator {
   }
 
   validate(data) {
-    if (!this.validateUserModel(data)) return false;
-    this.addToCollection(data);
-  }
-
-  validateUserModel(data) {
     this.validator.validate(data);
     if (this.validator.hasErrors(data)) {
       console.error(this.validator.messages.join('\n'));
-      for (let i = 0; i < this.validator.messages.length; i++) {
-        this.notificator.showNotifications(this.validator.messages[i], item, 'danger');
-      }
+      this.validator.messages.forEach((_,msg)=>{
+        this.notificator.showCustomNotification(msg, 'danger');
+      });
       return false;
     }
-    return data;
+    data.isValid = true;
+    this.addToCollection(data);
   }
 
   addToCollection(item) {
-    if (!this.validateUserModel(item)) return false;
+    if (!item.isValid) return false;
     console.log('Item is validated: ', item);
     let result;
     if (this.collection.isExist(item.login)) {
       result = this.collection.updateItem(item);
-      this.notificator.showNotifications('update', item, 'success');
+      this.notificator.showNotification('update', item, 'success');
     } else {
       result = this.collection.addItem(item);
-      this.notificator.showNotifications('add', item, 'success');
+      this.notificator.showNotification('add', item, 'success');
     }
     this.table.add(item);
     return result;
