@@ -54,7 +54,6 @@ export default class Validator {
     for (i in data) {
       if (data.hasOwnProperty(i) && this.config.hasOwnProperty(i)) {
         type = this.config[i]['type'];
-        console.log(type);
         checker = this.types[type];
         if (!type) {
           continue;
