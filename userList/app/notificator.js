@@ -8,7 +8,7 @@ export default class Notificator {
     this.showNotification = this.showNotification.bind(this);
     this.showCustomNotification = this.showCustomNotification.bind(this);
     this.form = form;
-
+    this.timeoutId;
   }
 
   showCustomNotification(text, theme = 'warning') {
@@ -28,7 +28,18 @@ export default class Notificator {
       </div>`;
     this.insertHtml(messageEl);
   }
-  insertHtml (html){
+
+  insertHtml(html) {
     this.form.formEl.insertAdjacentHTML("afterBegin", html);
+    this.closeNotification();
+  }
+
+  closeNotification() {
+    if (!this.timeoutId) {
+      this.timeoutId = setTimeout(() => {
+        $('.alert').alert('close');
+        this.timeoutId=false;
+      }, 5000);
+    }
   }
 }

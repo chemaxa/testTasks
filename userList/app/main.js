@@ -80,8 +80,8 @@ class Mediator {
 
 
 
-if (module.hot) {
-  module.hot.accept();
-}
+// if (module.hot) {
+//   module.hot.accept();
+// }
 //For testing
 export default Mediator;
