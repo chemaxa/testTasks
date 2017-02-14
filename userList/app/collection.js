@@ -51,8 +51,8 @@ export default class Collection {
     item.registered_on=Date.now();
     item.age = Number(item.age);
     item.role = Number(item.role);
-    this['_elems'] = Object.assign(this['_elems'], this['_elems'], {
-      [login]: item
+    this['_elems'] = Object.assign(this['_elems'], {
+      [login]: Object.assign({},item)
     });
     return item;
   }
@@ -84,7 +84,7 @@ export default class Collection {
     thisArg = thisArg || this['_elems'];
     for (let key in thisArg) {
       if (thisArg.hasOwnProperty(key))
-        func.call(thisArg, key, thisArg[key], thisArg);
+        func.call(thisArg,  thisArg[key], key, thisArg);
     }
   }
 
@@ -93,7 +93,7 @@ export default class Collection {
     let result = {};
     for (let key in thisArg) {
       if (thisArg.hasOwnProperty(key))
-        result[key] = func.call(thisArg, key, thisArg[key],  thisArg);
+        result[key] = func.call(thisArg, thisArg[key], key, thisArg);
     }
     return result;
   }

@@ -34,7 +34,7 @@ let mockUpdatedUser = {
 describe('Collection', () => {
   describe('Add item to collection', () => {
     it('Success must return added object', () => {
-      assert.deepEqual(collection.addItem(mockValidUser), mockValidUser, 'the objects is not equals');
+      assert.deepEqual(collection.addItem(mockValidUser), collection.getItem(mockValidUser['login']), 'the objects is not equals');
     });
   });
 
