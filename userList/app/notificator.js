@@ -15,7 +15,7 @@ export default class Notificator {
     let messageEl = `
       <div class="alert alert-${theme} alert-dismissible" role="alert">
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <strong>${theme == 'danger' ? 'Error!' : ''}</strong> text
+          <strong>${theme == 'danger' ? 'Error!' : ''}</strong> ${text}
       </div>`;
     this.insertHtml(messageEl);
   }
