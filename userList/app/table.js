@@ -1,6 +1,7 @@
+
 /**
- *@selector {string}  
- * 
+ * @selector {string}
+ * @collectio {collection}
  * @export
  * @class Table
  */
@@ -50,7 +51,7 @@ export default class Table {
     );
   }
   init() {
-    this.collection.forEach((i, user) => {
+    this.collection.forEach((user) => {
       let role;
       switch (user.role) {
         case 1:
