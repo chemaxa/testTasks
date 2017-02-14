@@ -34,7 +34,7 @@ class Mediator {
     this.validator.validate(data);
     if (this.validator.hasErrors(data)) {
       console.error(this.validator.messages.join('\n'));
-      this.validator.messages.forEach((_,msg)=>{
+      this.validator.messages.forEach((msg)=>{
         this.notificator.showCustomNotification(msg, 'danger');
       });
       return false;
