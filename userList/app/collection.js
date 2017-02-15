@@ -1,15 +1,17 @@
 import config from './config';
-//let storage=localStorage;
+
 let {
   appName,
   storage
 } = config;
 
-/*  forEach — простой обход сохранённых в коллекцию моделей
-2. map — обход с возвратом обработанных значений
-3. sort — сортировка моделей передаваемой функцией или по полю
-login, если функция не задана*/
 export default class Collection {
+  /**
+   * Creates an instance of Collection.
+   * 
+   * 
+   * @memberOf Collection
+   */
   constructor() {
     this._elems = this._getFromStorage();
     let
@@ -32,18 +34,48 @@ export default class Collection {
     });
   }
 
+  /**
+   * 
+   * 
+   * @returns {Object} List of Users
+   * 
+   * @memberOf Collection
+   */
   _getFromStorage() {
     return JSON.parse(storage.getItem(appName)) || {};
   }
 
-  _setToStorage(data) {
-    storage.setItem(appName, JSON.stringify(data));
+  /**
+   * Save user in Localstorage
+   * 
+   * @param {Object} User 
+   * 
+   * @memberOf Collection
+   */
+  _setToStorage(user) {
+    storage.setItem(appName, JSON.stringify(user));
   }
 
+  /**
+   * Check for user exist in List
+   * 
+   * @param {any} login
+   * @returns
+   * 
+   * @memberOf Collection
+   */
   isExist(login) {
     return !!this['_elems'][login];
   }
 
+  /**
+   * Add User to List
+   * 
+   * @param {Object} User
+   * @returns
+   * 
+   * @memberOf Collection
+   */
   addItem(item) {
     let login = item['login'];
     item.registered_on=Date.now();
@@ -55,10 +87,26 @@ export default class Collection {
     return item;
   }
 
+  /**
+   * Read user from List
+   * 
+   * @param {string} User login
+   * @returns {Object} User
+   * 
+   * @memberOf Collection
+   */
   getItem(login) {
     return this._elems[login] ? this._elems[login] : 'Item not found!';
   }
 
+  /**
+   * Update existing user with new data
+   * 
+   * @param {Object} newItem - User
+   * @returns
+   * 
+   * @memberOf Collection
+   */
   updateItem(newItem) {
     let oldItem = this['_elems'][newItem['login']];
     newItem.age = Number(newItem.age);
@@ -72,6 +120,14 @@ export default class Collection {
     return this['_elems'][newItem['login']];
   }
 
+  /**
+   * Delete user from List
+   * 
+   * @param {any} param - string with user login or  user object
+   * @returns
+   * 
+   * @memberOf Collection
+   */
   deleteItem(param) {
     let login = (typeof param === "string") ? param : param['login'];
     let result = delete this['_elems'][login];
@@ -79,6 +135,14 @@ export default class Collection {
     return result;
   }
 
+  /**
+   * Same as Array.forEach
+   * 
+   * @param {Function} func - callback Function
+   * @param {Object} Context for callback Function
+   * 
+   * @memberOf Collection
+   */
   forEach(func, thisArg=this['_elems']) {
     for (let key in thisArg) {
       if (thisArg.hasOwnProperty(key))
@@ -86,6 +150,15 @@ export default class Collection {
     }
   }
 
+  /**
+   * Sane as Array.map
+   * 
+   * @param {function} func -  function
+   * @param {Object} thisArg - Context for provided function
+   * @returns {Object} result of calling of provided function
+   * 
+   * @memberOf Collection
+   */
   map(func, thisArg=this['_elems']) {
     let result = {};
     for (let key in thisArg) {
@@ -95,6 +168,14 @@ export default class Collection {
     return result;
   }
 
+  /**
+   * Sane as Array.sort
+   * 
+   * @param {Function} func - comparator function
+   * @returns {Object} sorted list of Users 
+   * 
+   * @memberOf Collection
+   */
   sort(func) {
     let result = {};
     let tmpArr = [];

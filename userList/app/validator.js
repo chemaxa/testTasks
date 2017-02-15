@@ -11,6 +11,13 @@ registered_on — тип number, таймстемп времени создан�
 */
 
 export default class Validator {
+  /**
+   * Creates an instance of Validator.
+   * 
+   * @param {Object} config
+   * 
+   * @memberOf Validator
+   */
   constructor(config) {
     let defaultConfig = {
       first_name: {
@@ -48,6 +55,13 @@ export default class Validator {
     this.types = this.types.call(this);
   }
 
+  /**
+   * Validate user input
+   * 
+   * @param {Object} Object with user data
+   * 
+   * @memberOf Validator
+   */
   validate(data) {
     let i, msg, type, checker, success;
     this.messages = [];
@@ -74,10 +88,24 @@ export default class Validator {
     }
   }
 
+  /**
+   * Check existence of errors 
+   * 
+   * @returns {boolean} false if no errors
+   * 
+   * @memberOf Validator
+   */
   hasErrors() {
     return this.messages.length !== 0;
   }
 
+  /**
+   * Types of validators
+   * 
+   * @returns {Object} With types
+   * 
+   * @memberOf Validator
+   */
   types() {
     let isBool = {
       validate: (value) => typeof value === 'boolean'

@@ -4,18 +4,13 @@ import Table from './table';
 import Notificator from './notificator';
 import Validator from './validator';
 
-// let mockUser = {
-//   first_name: "FirstName", //-
-//   last_name: "LastName",  // -
-//   active: true, //-
-//   age: 55, //-
-//   login: "login", //-
-//   password: "password", //-
-//   role: 1, //+
-//   registered_on: new Date() //-
-// };
-
 class Mediator {
+  /**
+   * Creates an instance of Mediator.
+   * Main class in app
+   * 
+   * @memberOf Mediator
+   */
   constructor() {
     this.tableHandler=this.tableHandler.bind(this);
     this.validate = this.validate.bind(this);
@@ -28,40 +23,70 @@ class Mediator {
     this.notificator = new Notificator(this.form);
   }
 
+  /**
+   * Init 
+   * 
+   * 
+   * @memberOf Mediator
+   */
   init() {
     this.form.getDataFromHtml.call(this, this.validate);
     this.table.sort('active', 'ASC');
   }
 
-  validate(data) {
-    this.validator.validate(data);
-    if (this.validator.hasErrors(data)) {
+  /**
+   * 
+   * 
+   * @param {Object} Object with User data
+   * @returns {boolean} false if user input data not valid
+   * 
+   * @memberOf Mediator
+   */
+  validate(user) {
+    this.validator.validate(user);
+    if (this.validator.hasErrors(user)) {
       console.error(this.validator.messages.join('\n'));
       this.validator.messages.forEach((msg) => {
         this.notificator.showCustomNotification(msg, 'danger');
       });
       return false;
     }
-    data.isValid = true;
-    this.addToCollection(data);
+    user.isValid = true;
+    this.addToCollection(user);
     this.form.reset();
   }
 
-  addToCollection(item) {
-    if (!item.isValid) return false;
+  /**
+   * Manipulate with Collection for add new user
+   * 
+   * @param {Object} user
+   * @returns {Object} user
+   * 
+   * @memberOf Mediator
+   */
+  addToCollection(user) {
+    if (!user.isValid) return false;
     let result;
-    if (this.collection.isExist(item.login)) {
-      result = this.collection.updateItem(item);
-      this.notificator.showNotification('update', item, 'success');
+    if (this.collection.isExist(user.login)) {
+      result = this.collection.updateItem(user);
+      this.notificator.showNotification('update', user, 'success');
       this.table.update(result);
     } else {
-      result = this.collection.addItem(item);
-      this.notificator.showNotification('add', item, 'success');
+      result = this.collection.addItem(user);
+      this.notificator.showNotification('add', user, 'success');
       this.table.add(result);
     }
     return result;
   }
 
+  /**
+   * Delet user from Collection
+   * 
+   * @param {string} login
+   * @returns {boolean} false if user not exist
+   * 
+   * @memberOf Mediator
+   */
   deleteFromCollection(login) {
     if (this.collection.isExist(login)) {
       this.collection.deleteItem(login);
@@ -69,11 +94,25 @@ class Mediator {
     return false;
   }
 
+  /**
+   * Fill form element with user data
+   * 
+   * @param {string} login
+   * 
+   * @memberOf Mediator
+   */
   editUser(login){
     let item = this.collection.getItem(login);
     this.form.setDataToHtml(item);
   }
 
+  /**
+   * Callback for table events
+   * 
+   * @param {Object} event
+   * 
+   * @memberOf Mediator
+   */
   tableHandler(event) {
     if (event.target.dataset.appSort) {
       let sortField = event.target.dataset.appSort;
@@ -90,7 +129,7 @@ class Mediator {
   }
 }
 
-(function Main() {
+;(function Main() {
   let mediator = new Mediator();
   mediator.init();
 })();

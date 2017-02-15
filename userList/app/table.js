@@ -1,8 +1,5 @@
 /**
- * @selector {string}
- * @collectio {collection}
- * @export
- * @class Table
+  * 
   1. **Role** — сортируемое, выводятся текстовые названия ролей из  объекта, описанного выше
   2. **Login** — сортируемое
   3. **Full name** — сортируемое, выводится на основе полей last_name
@@ -12,7 +9,17 @@
   6. **Active** — в формате Yes/No
   Roles: {1: ‘Administrator’, 2: ‘Technician’, 3:‘Manager’, 4: ‘Supervisor’}
  */
+
 export default class Table {
+  /**
+   * Creates an instance of Table.
+   * 
+   * @param {any} selector for DOM element
+   * @param {any} collection of users
+   * @param {any} handler callback for form events
+   * 
+   * @memberOf Table
+   */
   constructor(selector, collection, handler) {
     this.tableEl = document.querySelector(selector);
     if (!this.tableEl) throw new Error("Incorrect selector for TABLE element!");
@@ -21,43 +28,39 @@ export default class Table {
     this.collection = collection;
   }
 
+  /**
+   * 
+   * 
+   * @param {Object} user
+   * 
+   * @memberOf Table
+   */
   add(user) {
-    let regDate = new Date(user.registered_on);
-    let role = this._getUserRoleName(user.role);
-    $(this.tableEl).find('tbody').append(
-      `<tr data-app-userId=${user.login}>
-          <td>${role}</td>
-          <td>${user.login}</td>
-          <td>${user.first_name} ${user.last_name}</td>
-          <td>${user.age}</td>
-          <td>${regDate.toLocaleDateString()}</td>
-          <td>${user.active}</td>
-          <td><button type="button" class="btn btn-primary" data-app-edit=${user.login}>Редактировать</button></td>
-          <td><button type="button" class="btn btn-danger" data-app-delete=${user.login}>Удалить</button></td>
-      </tr>`
-    );
+    $(this.tableEl).find('tbody').append(this._getRowStr(user));
   }
 
+  /**
+   * 
+   * 
+   * @param {Object} [List of users]
+   * 
+   * @memberOf Table
+   */
   init(list = this.collection['_elems']) {
     $(this.tableEl).find('tbody').empty();
     this.collection.forEach((user) => {
-      let role = this._getUserRoleName(user.role);
-      let regDate = new Date(user.registered_on);
-      $(this.tableEl).find('tbody').append(
-        `<tr data-app-userId=${user.login}>
-            <td>${role}</td>
-            <td>${user.login}</td>
-            <td>${user.first_name} ${user.last_name}</td>
-            <td>${user.age}</td>
-            <td>${regDate.toLocaleDateString()}</td>
-            <td>${user.active}</td>
-            <td><button type="button" class="btn btn-primary" data-app-edit=${user.login}>Редактировать</button></td>
-            <td><button type="button" class="btn btn-danger" data-app-delete=${user.login}>Удалить</button></td>
-        </tr>`
-      );
+      $(this.tableEl).find('tbody').append(this._getRowStr(user));
     }, list);
   }
   
+  /**
+   * 
+   * 
+   * @param {string} field
+   * @param {string} order
+   * 
+   * @memberOf Table
+   */
   sort(field, order) {
     let self = this;
     function comparator(item1, item2) {
@@ -83,11 +86,40 @@ export default class Table {
     this.init(this.collection.sort(comparator));
   }
 
+  /**
+   * 
+   * 
+   * @param {Object} user
+   * 
+   * @memberOf Table
+   */
   update(user) {
+    $(this.tableEl).find(`tbody tr[data-app-userId=${user.login}]`).replaceWith(this._getRowStr(user));
+  }
+  
+  /**
+   * 
+   * 
+   * @param {Object} user
+   * 
+   * @memberOf Table
+   */
+  delete(user) {
+    $(this.tableEl).find(`tbody tr[data-app-userId=${user}]`).remove();
+  }
+
+  /**
+   * 
+   * 
+   * @param {Object} user
+   * @returns {string} string with html for table row
+   * 
+   * @memberOf Table
+   */
+  _getRowStr(user){
     let regDate = new Date(user.registered_on);
     let role = this._getUserRoleName(user.role);
-    $(this.tableEl).find(`tbody tr[data-app-userId=${user.login}]`).replaceWith(
-      `<tr data-app-userId=${user.login}>
+    return `<tr data-app-userId=${user.login}>
           <td>${role}</td>
           <td>${user.login}</td>
           <td>${user.first_name} ${user.last_name}</td>
@@ -96,13 +128,17 @@ export default class Table {
           <td>${user.active}</td>
           <td><button type="button" class="btn btn-primary" data-app-edit=${user.login}>Редактировать</button></td>
           <td><button type="button" class="btn btn-danger" data-app-delete=${user.login}>Удалить</button></td>
-      </tr>`);
-  }
-  
-  delete(user) {
-    $(this.tableEl).find(`tbody tr[data-app-userId=${user}]`).remove();
+      </tr>`;
   }
 
+  /**
+   * 
+   * 
+   * @param {any} indx
+   * @returns {string} Name of Role
+   * 
+   * @memberOf Table
+   */
   _getUserRoleName(indx) {
     let role;
     switch (indx) {
