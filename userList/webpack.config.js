@@ -43,7 +43,7 @@ module.exports = {
   devServer: {
     publicPath: '/',
     hot: false,
-    inline: false,
+    inline: true,
     contentBase: './public',
     historyApiFallback: true,
     stats: {
