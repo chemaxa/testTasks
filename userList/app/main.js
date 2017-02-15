@@ -70,9 +70,7 @@ class Mediator {
   }
 
   editUser(login){
-    console.log(login);
     let item = this.collection.getItem(login);
-    console.log('Edited: ', item);
     this.form.setDataToHtml(item);
   }
 
