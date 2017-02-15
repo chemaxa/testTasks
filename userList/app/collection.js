@@ -25,7 +25,6 @@ export default class Collection {
         newValue = value;
         this._setToStorage(value);
       };
-
     Object.defineProperty(obj, prop, {
       get: getter,
       set: setter,

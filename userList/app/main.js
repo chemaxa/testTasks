@@ -44,6 +44,7 @@ class Mediator {
     }
     data.isValid = true;
     this.addToCollection(data);
+    this.form.reset();
   }
 
   addToCollection(item) {
@@ -63,8 +64,7 @@ class Mediator {
 
   deleteFromCollection(login) {
     if (this.collection.isExist(login)) {
-      let item = this.collection.deleteItem(login);
-      console.log('Deleted: ', login, item);
+      this.collection.deleteItem(login);
     }
     return false;
   }
@@ -90,12 +90,10 @@ class Mediator {
   }
 }
 
-!(function Main(global) {
+(function Main() {
   let mediator = new Mediator();
   mediator.init();
-})(window);
-
-
+})();
 
 // if (module.hot) {
 //   module.hot.accept();

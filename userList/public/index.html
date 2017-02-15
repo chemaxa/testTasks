@@ -41,11 +41,11 @@
                 <form data-app-form="editForm">
                     <div class="form-group">
                         <label for="first_name">Имя (от 3 до 15 букв)</label>
-                        <input value="First name" type="text" class="form-control" name="first_name" placeholder="Имя" required>
+                        <input value="" type="text" class="form-control" name="first_name" placeholder="Имя" required>
                     </div>
                     <div class="form-group">
                         <label for="last_name">Фамилия (от 3 до 25 букв)</label>
-                        <input value="Lasst name" type="text" class="form-control" name="last_name" placeholder="Фамилия" required>
+                        <input value="" type="text" class="form-control" name="last_name" placeholder="Фамилия" required>
                     </div>
                     <div class="form-group">
                         <label>Активный
@@ -54,19 +54,20 @@
                     </div>
                     <div class="form-group">
                         <label for="age">Возраст (От 18 до 55 )</label>
-                        <input value="18" type="number" class="form-control" name="age" placeholder="Возраст" required min="18" max="55" step="1">
+                        <input value="" type="number" class="form-control" name="age" placeholder="Возраст" required min="18" max="55" step="1">
                     </div>
                     <div class="form-group">
                         <label for="login">Логин ( Разрешенные символы a-z, 0-9, _ и -, не менее 3 символов)</label>
-                        <input value="login" type="text" class="form-control" name="login" placeholder="Логин" required pattern="^[a-z0-9_-]{3,}$">
+                        <input value="" type="text" class="form-control" name="login" placeholder="Логин" required pattern="^[a-z0-9_-]{3,}$">
                     </div>
                     <div class="form-group">
                         <label for="password">Пароль (не менее 8 символов)</label>
-                        <input value="password" type="password" class="form-control" name="password" placeholder="Пароль" required>
+                        <input value="" type="password" class="form-control" name="password" placeholder="Пароль" required>
                     </div>
                     <div class="form-group">
                         <label>Роль</label>
                         <select name="role" class="form-control" required>
+                            <option>Роль</option>
                             <option value="1">Administrator</option>
                             <option value="2">Technician</option>
                             <option value="3">Manager</option>

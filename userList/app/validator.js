@@ -39,7 +39,7 @@ export default class Validator {
       },
       role: {
         type:"isRole",
-        instruction: "The value should be in range from 1 to 4"
+        instruction: "The value should be: Administrator, Technician, Manager, Supervisor"
       }
     };
     
@@ -58,16 +58,13 @@ export default class Validator {
         if (!type) {
           continue;
         }
-
         if (!checker) {
           throw {
             name: "ValidationError",
             message: `No handler to validate type ${type}`
           };
         }
-
         success = checker.validate(data[i]);
-        
         if (!success) {
           msg = `Invalid value for * ${i} *, ${this.config[i]['instruction']}`;
           
