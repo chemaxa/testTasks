@@ -24,14 +24,14 @@ export default class Table {
 
   add(user) {
     let regDate = new Date(user.registered_on);
-    let role = this.getUserRoleName(user.role);
+    let role = this._getUserRoleName(user.role);
     $(this.tableEl).find('tbody').append(
       `<tr data-id=${user.login}>
           <td>${role}</td>
           <td>${user.login}</td>
           <td>${user.first_name} ${user.last_name}</td>
           <td>${user.age}</td>
-          <td>${regDate.getDate()} / ${regDate.getMonth()} / ${regDate.getFullYear()}</td>
+          <td>${regDate.toLocaleDateString()}</td>
           <td>${user.active}</td>
       </tr>`
     );
@@ -40,7 +40,7 @@ export default class Table {
   init(list = this.collection['_elems']) {
     $(this.tableEl).find('tbody').empty();
     this.collection.forEach((user) => {
-      let role = this.getUserRoleName(user.role);
+      let role = this._getUserRoleName(user.role);
       let regDate = new Date(user.registered_on);
       $(this.tableEl).find('tbody').append(
         `<tr data-id=${user.login}>
@@ -48,7 +48,7 @@ export default class Table {
             <td>${user.login}</td>
             <td>${user.first_name} ${user.last_name}</td>
             <td>${user.age}</td>
-            <td>${regDate.getDate()} / ${regDate.getMonth()} / ${regDate.getFullYear()}</td>
+            <td>${regDate.toLocaleDateString()}</td>
             <td>${user.active}</td>
         </tr>`
       );
@@ -64,7 +64,7 @@ export default class Table {
 
   sort(field, order) {
     let self = this;
-    function sorter(item1, item2) {
+    function comparator(item1, item2) {
       let param1, param2;
       if(item1['active'] === item2['active']) {
         item1[field] = typeof item1[field] == 'string' ? item1[field].toLowerCase() : item1[field];
@@ -77,17 +77,31 @@ export default class Table {
           param1 = item2[field];
         }
         if (field === 'role') {
-          param1 = self.getUserRoleName(param1);
-          param2 = self.getUserRoleName(param2);
+          param1 = self._getUserRoleName(param1);
+          param2 = self._getUserRoleName(param2);
         }
         return param1 < param2 ? -1 : (param1 > param2 ? 1 : 0);
       }
       return item1['active'] < item2['active'] ? 1 : -1;
     }
-    this.init(this.collection.sort(sorter));
+    this.init(this.collection.sort(comparator));
   }
 
-  getUserRoleName(indx) {
+  update(user) {
+    let regDate = new Date(user.registered_on);
+    let role = this._getUserRoleName(user.role);
+    $(this.tableEl).find(`tbody tr[data-id=${user.login}]`).replaceWith(
+      `<tr data-id=${user.login}>
+          <td>${role}</td>
+          <td>${user.login}</td>
+          <td>${user.first_name} ${user.last_name}</td>
+          <td>${user.age}</td>
+          <td>${regDate.toLocaleDateString()}</td>
+          <td>${user.active}</td>
+      </tr>`);
+  }
+
+  _getUserRoleName(indx) {
     let role;
     switch (indx) {
       case 1:
@@ -106,33 +120,5 @@ export default class Table {
         role = 'Anonimus';
     }
     return role;
-  }
-
-  update(user) {
-    let regDate = new Date(user.registered_on);
-    let role;
-    switch (user.role) {
-      case 1:
-        role = 'Administrator';
-        break;
-      case 2:
-        role = 'Technician';
-        break;
-      case 3:
-        role = 'Manager';
-        break;
-      case 4:
-        role = 'Supervisor';
-        break;
-    }
-    $(this.tableEl).find(`tbody tr[data-id=${user.login}]`).replaceWith(
-      `<tr data-id=${user.login}>
-          <td>${role}</td>
-          <td>${user.login}</td>
-          <td>${user.first_name} ${user.last_name}</td>
-          <td>${user.age}</td>
-          <td>${regDate.getDate()} / ${regDate.getMonth()} / ${regDate.getFullYear()}</td>
-          <td>${user.active}</td>
-      </tr>`);
   }
 }
