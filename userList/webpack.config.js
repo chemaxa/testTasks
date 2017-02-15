@@ -13,10 +13,10 @@ module.exports = {
     moduleDirectories: ['node_modules'],
     moduleTemplates: ['*-loader']
   },
-   entry: [
+  entry: [
     './app/main'
   ],
-   output: {
+  output: {
     path: __dirname + '/public',
     filename: 'bundle.js',
     publicPath: '/'
@@ -25,7 +25,7 @@ module.exports = {
     new webpack.NoErrorsPlugin(),
     //new webpack.HotModuleReplacementPlugin()
   ],
-   module: {   
+  module: {
     loaders: [{
       test: /\.js?$/,
       loader: 'babel',
@@ -35,7 +35,7 @@ module.exports = {
         presets: ['es2015']
       },
       plugins: ['transform-runtime']
-    }] 
+    }]
   },
   node: {
     fs: "empty"
@@ -43,7 +43,7 @@ module.exports = {
   devServer: {
     publicPath: '/',
     hot: false,
-    inline: true,
+    inline: false,
     contentBase: './public',
     historyApiFallback: true,
     stats: {
