@@ -32,6 +32,7 @@ export default class Table {
           <td>${user.age}</td>
           <td>${regDate.toLocaleDateString()}</td>
           <td>${user.active}</td>
+          <td><button type="button" class="btn btn-primary" data-app-edit=${user.login}>Редактировать</button></td>
           <td><button type="button" class="btn btn-danger" data-app-delete=${user.login}>Удалить</button></td>
       </tr>`
     );
@@ -50,6 +51,7 @@ export default class Table {
             <td>${user.age}</td>
             <td>${regDate.toLocaleDateString()}</td>
             <td>${user.active}</td>
+            <td><button type="button" class="btn btn-primary" data-app-edit=${user.login}>Редактировать</button></td>
             <td><button type="button" class="btn btn-danger" data-app-delete=${user.login}>Удалить</button></td>
         </tr>`
       );
@@ -92,6 +94,7 @@ export default class Table {
           <td>${user.age}</td>
           <td>${regDate.toLocaleDateString()}</td>
           <td>${user.active}</td>
+          <td><button type="button" class="btn btn-primary" data-app-edit=${user.login}>Редактировать</button></td>
           <td><button type="button" class="btn btn-danger" data-app-delete=${user.login}>Удалить</button></td>
       </tr>`);
   }

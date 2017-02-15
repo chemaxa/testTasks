@@ -19,7 +19,8 @@ class Mediator {
   constructor() {
     this.tableHandler=this.tableHandler.bind(this);
     this.validate = this.validate.bind(this);
-    
+    this.editUser=this.editUser.bind(this);
+
     this.collection = new Collection(),
     this.validator = new Validator(),
     this.table = new Table('[data-app-list]', this.collection, this.tableHandler),
@@ -57,17 +58,21 @@ class Mediator {
       this.notificator.showNotification('add', item, 'success');
       this.table.add(result);
     }
-
     return result;
   }
 
   deleteFromCollection(login) {
-    //TODO: create realisation ...
     if (this.collection.isExist(login)) {
       let item = this.collection.deleteItem(login);
       console.log('Deleted: ', login, item);
     }
     return false;
+  }
+
+  editUser(login){
+    console.log(login);
+    let item = this.collection.getItem(login);
+    console.log('Edited: ', item);
   }
 
   tableHandler(event) {
@@ -79,6 +84,9 @@ class Mediator {
     if (event.target.dataset.appDelete) {
       this.deleteFromCollection(event.target.dataset.appDelete);
       this.table.delete(event.target.dataset.appDelete);
+    }
+    if (event.target.dataset.appEdit) {
+      this.editUser(event.target.dataset.appEdit);
     }
   }
 }
