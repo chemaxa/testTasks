@@ -80,16 +80,14 @@ export default class Collection {
     return result;
   }
 
-  forEach(func, thisArg) {
-    thisArg = thisArg || this['_elems'];
+  forEach(func, thisArg=this['_elems']) {
     for (let key in thisArg) {
       if (thisArg.hasOwnProperty(key))
         func.call(thisArg,  thisArg[key], key, thisArg);
     }
   }
 
-  map(func, thisArg) {
-    thisArg = thisArg || this['_elems'];
+  map(func, thisArg=this['_elems']) {
     let result = {};
     for (let key in thisArg) {
       if (thisArg.hasOwnProperty(key))
