@@ -24,9 +24,7 @@ export default class Table {
 
   add(user) {
     let regDate = new Date(user.registered_on);
-    
     let role = this.getUserRoleName(user.role);
-
     $(this.tableEl).find('tbody').append(
       `<tr data-id=${user.login}>
           <td>${role}</td>
@@ -43,7 +41,6 @@ export default class Table {
     $(this.tableEl).find('tbody').empty();
     this.collection.forEach((user) => {
       let role = this.getUserRoleName(user.role);
-
       let regDate = new Date(user.registered_on);
       $(this.tableEl).find('tbody').append(
         `<tr data-id=${user.login}>
@@ -61,7 +58,6 @@ export default class Table {
   handler(event) {
     if (!event.target.dataset.appSort) return;
     let sortField = event.target.dataset.appSort;
-    console.log(sortField);
     this.sort(sortField, this.sortOrder);
     this.sortOrder = this.sortOrder === 'ASC' ? 'DESC' : 'ASC';
   }
@@ -70,26 +66,25 @@ export default class Table {
     let self = this;
     function sorter(item1, item2) {
       let param1, param2;
-      item1[field] = typeof item1[field] == 'string' ? item1[field].toLowerCase() : item1[field];
-      item2[field] = typeof item2[field] == 'string' ? item2[field].toLowerCase() : item2[field];
-      if (order === 'ASC') {
-        param1 = item1[field];
-        param2 = item2[field];
-      } else {
-        param2 = item1[field];
-        param1 = item2[field];
+      if(item1['active'] === item2['active']) {
+        item1[field] = typeof item1[field] == 'string' ? item1[field].toLowerCase() : item1[field];
+        item2[field] = typeof item2[field] == 'string' ? item2[field].toLowerCase() : item2[field];
+        if (order === 'ASC') {
+          param1 = item1[field];
+          param2 = item2[field];
+        } else {
+          param2 = item1[field];
+          param1 = item2[field];
+        }
+        if (field === 'role') {
+          param1 = self.getUserRoleName(param1);
+          param2 = self.getUserRoleName(param2);
+        }
+        return param1 < param2 ? -1 : (param1 > param2 ? 1 : 0);
       }
-      if (field === 'role') {
-        param1 = self.getUserRoleName(param1);
-        param2 = self.getUserRoleName(param2);
-      }
-      return param1 < param2 ? -1 : (param1 > param2 ? 1 : 0);
+      return item1['active'] < item2['active'] ? 1 : -1;
     }
-
-    let sorted = this.collection.sort(sorter);
-    console.info('Collection: ', this.collection._elems);
-    console.info('Sorted: ', sorted);
-    this.init(sorted);
+    this.init(this.collection.sort(sorter));
   }
 
   getUserRoleName(indx) {
