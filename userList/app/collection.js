@@ -74,8 +74,9 @@ export default class Collection {
     return this['_elems'][newItem['login']];
   }
 
-  deleteItem(item) {
-    let result = delete this['_elems'][item['login']];
+  deleteItem(param) {
+    let login = (typeof param === "string") ? param : param['login'];
+    let result = delete this['_elems'][login];
     this['_elems'] = Object.assign(this['_elems'], this['_elems']);
     return result;
   }
