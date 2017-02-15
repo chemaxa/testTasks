@@ -4,7 +4,7 @@ export default class Notificator {
       "update": "User $login was updated",
       "add": "User $login was added"
     };
-    this.notifications = Object.assign(defaultNotifications, notifications || {});
+    this.notifications = Object.assign(defaultNotifications, notifications);
     this.showNotification = this.showNotification.bind(this);
     this.showCustomNotification = this.showCustomNotification.bind(this);
     this.form = form;
