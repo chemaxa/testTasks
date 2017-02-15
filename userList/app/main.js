@@ -16,25 +16,27 @@ import Validator from './validator';
 // };
 
 class Mediator {
-  constructor(collection, table, form, validator,notificator) {
-    this.collection = collection;
-    this.validator = validator;
-    this.table = table;
-    this.form = form;
-    this.notificator = notificator;
+  constructor() {
+    this.tableHandler=this.tableHandler.bind(this);
     this.validate = this.validate.bind(this);
+    
+    this.collection = new Collection(),
+    this.validator = new Validator(),
+    this.table = new Table('[data-app-list]', this.collection, this.tableHandler),
+    this.form = new Form('[data-app-form]'),
+    this.notificator = new Notificator(this.form);
   }
 
   init() {
     this.form.getDataFromHtml.call(this, this.validate);
-    this.table.init();
+    this.table.sort('active', 'ASC');
   }
 
   validate(data) {
     this.validator.validate(data);
     if (this.validator.hasErrors(data)) {
       console.error(this.validator.messages.join('\n'));
-      this.validator.messages.forEach((msg)=>{
+      this.validator.messages.forEach((msg) => {
         this.notificator.showCustomNotification(msg, 'danger');
       });
       return false;
@@ -55,26 +57,34 @@ class Mediator {
       this.notificator.showNotification('add', item, 'success');
       this.table.add(result);
     }
-    
+
     return result;
   }
 
-  deleteFromCollection(item) {
+  deleteFromCollection(login) {
     //TODO: create realisation ...
-    if (this.collection.isExist(item.login)) {
-      console.log('Deleted: ',item);
+    if (this.collection.isExist(login)) {
+      let item = this.collection.deleteItem(login);
+      console.log('Deleted: ', login, item);
     }
     return false;
+  }
+
+  tableHandler(event) {
+    if (event.target.dataset.appSort) {
+      let sortField = event.target.dataset.appSort;
+      this.table.sort(sortField, this.table.sortOrder);
+      this.table.sortOrder = this.table.sortOrder === 'ASC' ? 'DESC' : 'ASC';
+    }
+    if (event.target.dataset.appDelete) {
+      this.deleteFromCollection(event.target.dataset.appDelete);
+      this.table.delete(event.target.dataset.appDelete);
+    }
   }
 }
 
 !(function Main(global) {
-  let collection = new Collection(),
-    validator = new Validator(),
-    table = new Table('[data-app-list]',collection),
-    form = new Form('[data-app-form]'),
-    notificator = new Notificator(form);
-  let mediator = new Mediator(collection, table, form, validator,notificator);
+  let mediator = new Mediator();
   mediator.init();
 })(window);
 
