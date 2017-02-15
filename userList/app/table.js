@@ -13,11 +13,10 @@
   Roles: {1: ‘Administrator’, 2: ‘Technician’, 3:‘Manager’, 4: ‘Supervisor’}
  */
 export default class Table {
-  constructor(selector, collection) {
+  constructor(selector, collection, handler) {
     this.tableEl = document.querySelector(selector);
     if (!this.tableEl) throw new Error("Incorrect selector for TABLE element!");
-    this.handler = this.handler.bind(this);
-    this.tableEl.addEventListener('click', this.handler, false);
+    this.tableEl.addEventListener('click', handler, false);
     this.sortOrder = 'ASC';
     this.collection = collection;
   }
@@ -26,13 +25,14 @@ export default class Table {
     let regDate = new Date(user.registered_on);
     let role = this._getUserRoleName(user.role);
     $(this.tableEl).find('tbody').append(
-      `<tr data-id=${user.login}>
+      `<tr data-app-userId=${user.login}>
           <td>${role}</td>
           <td>${user.login}</td>
           <td>${user.first_name} ${user.last_name}</td>
           <td>${user.age}</td>
           <td>${regDate.toLocaleDateString()}</td>
           <td>${user.active}</td>
+          <td><button type="button" class="btn btn-danger" data-app-delete=${user.login}>Удалить</button></td>
       </tr>`
     );
   }
@@ -43,25 +43,19 @@ export default class Table {
       let role = this._getUserRoleName(user.role);
       let regDate = new Date(user.registered_on);
       $(this.tableEl).find('tbody').append(
-        `<tr data-id=${user.login}>
+        `<tr data-app-userId=${user.login}>
             <td>${role}</td>
             <td>${user.login}</td>
             <td>${user.first_name} ${user.last_name}</td>
             <td>${user.age}</td>
             <td>${regDate.toLocaleDateString()}</td>
             <td>${user.active}</td>
+            <td><button type="button" class="btn btn-danger" data-app-delete=${user.login}>Удалить</button></td>
         </tr>`
       );
     }, list);
   }
-
-  handler(event) {
-    if (!event.target.dataset.appSort) return;
-    let sortField = event.target.dataset.appSort;
-    this.sort(sortField, this.sortOrder);
-    this.sortOrder = this.sortOrder === 'ASC' ? 'DESC' : 'ASC';
-  }
-
+  
   sort(field, order) {
     let self = this;
     function comparator(item1, item2) {
@@ -90,15 +84,20 @@ export default class Table {
   update(user) {
     let regDate = new Date(user.registered_on);
     let role = this._getUserRoleName(user.role);
-    $(this.tableEl).find(`tbody tr[data-id=${user.login}]`).replaceWith(
-      `<tr data-id=${user.login}>
+    $(this.tableEl).find(`tbody tr[data-app-userId=${user.login}]`).replaceWith(
+      `<tr data-app-userId=${user.login}>
           <td>${role}</td>
           <td>${user.login}</td>
           <td>${user.first_name} ${user.last_name}</td>
           <td>${user.age}</td>
           <td>${regDate.toLocaleDateString()}</td>
           <td>${user.active}</td>
+          <td><button type="button" class="btn btn-danger" data-app-delete=${user.login}>Удалить</button></td>
       </tr>`);
+  }
+  
+  delete(user) {
+    $(this.tableEl).find(`tbody tr[data-app-userId=${user}]`).remove();
   }
 
   _getUserRoleName(indx) {
