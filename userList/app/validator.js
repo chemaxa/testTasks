@@ -85,12 +85,6 @@ export default class Validator {
     let isBool = {
       validate: (value) => typeof value === 'boolean'
     };
-    let isExist={
-      validate: (value) => {
-        return !!value;
-      },
-      instructions: "The value should not be null"
-    };
     let isAgeInRange = {
       validate: (age) => {
         return (17 < age && age < 56);
@@ -104,8 +98,7 @@ export default class Validator {
     let isString3to25 = {
       validate: (value) => {
         return (typeof value == "string") && (3 < value.length && value.length < 25);
-      },
-      
+      }
     };
     let isAlphaNumFrom3 = {
       validate: (value) => {
@@ -136,8 +129,7 @@ export default class Validator {
       isAlphaNumFrom3,
       isStringFrom8,
       isRole,
-      isDate,
-      isExist
+      isDate
     };
   }
 

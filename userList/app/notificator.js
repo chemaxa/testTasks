@@ -17,7 +17,7 @@ export default class Notificator {
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <strong>${theme == 'danger' ? 'Error!' : ''}</strong> ${text}
       </div>`;
-    this.insertHtml(messageEl);
+    this._insertHtml(messageEl);
   }
 
   showNotification(event, item, theme = 'warning') {
@@ -26,15 +26,15 @@ export default class Notificator {
           <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           <strong>${theme == 'danger' ? 'Error!' : ''}</strong> ${this.notifications[event].replace('$login',item.login)}
       </div>`;
-    this.insertHtml(messageEl);
+    this._insertHtml(messageEl);
   }
 
-  insertHtml(html) {
+  _insertHtml(html) {
     this.form.formEl.insertAdjacentHTML("afterBegin", html);
-    this.closeNotification();
+    this._closeNotification();
   }
 
-  closeNotification() {
+  _closeNotification() {
     if (!this.timeoutId) {
       this.timeoutId = setTimeout(() => {
         $('.alert').alert('close');

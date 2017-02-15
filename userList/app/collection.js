@@ -11,11 +11,11 @@ let {
 login, если функция не задана*/
 export default class Collection {
   constructor() {
-    this._elems = this.getFromStorage();
+    this._elems = this._getFromStorage();
     let
       obj = this,
       prop = '_elems',
-      oldValue = this.getFromStorage(),
+      oldValue = this._getFromStorage(),
       newValue = oldValue,
       getter = function () {
         return newValue;
@@ -23,8 +23,7 @@ export default class Collection {
       setter = function (value) {
         oldValue = newValue;
         newValue = value;
-        this.setToStorage(value);
-        //console.log('SETTER WAS CALLED!', newValue);
+        this._setToStorage(value);
       };
 
     Object.defineProperty(obj, prop, {
@@ -34,11 +33,11 @@ export default class Collection {
     });
   }
 
-  getFromStorage() {
+  _getFromStorage() {
     return JSON.parse(storage.getItem(appName)) || {};
   }
 
-  setToStorage(data) {
+  _setToStorage(data) {
     storage.setItem(appName, JSON.stringify(data));
   }
 
