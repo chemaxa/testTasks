@@ -45,8 +45,7 @@ export default class Form{
   setDataToHtml(dataItem){
     for(let key in dataItem){
       if(dataItem.hasOwnProperty(key) && this.formEl.elements[key] && this.formEl.elements[key].value){
-          this.formEl.elements[key].value=dataItem[key];
-          this.formEl.elements[key].checked=dataItem[key];
+          this.formEl.elements[key].checked=this.formEl.elements[key].value=dataItem[key];
       }
     }
   }
