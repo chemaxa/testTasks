@@ -6,50 +6,11 @@ export default class Form {
    * 
    * @memberOf Form
    */
-  constructor(selector) {
+  constructor(selector,handler) {
     this.formEl = document.querySelector(selector);
     if (!this.formEl) throw new Error("Incorrect selector for FORM element!");
     this.setDataToHtml = this.setDataToHtml.bind(this);
-  }
-
-  /**
-   * Calling callback function after form submit
-   * 
-   * @param {Function} Callback function 
-   * 
-   * @memberOf Form
-   */
-  getDataFromHtml(cb) {
-    this.form.formEl.addEventListener('submit', formHandler, false);
-    let user = {
-      first_name: '',
-      last_name: '',
-      active: '',
-      age: '',
-      login: '',
-      password: '',
-      role: ''
-    };
-    function formHandler(event) {
-      event.preventDefault();
-      for (let key in this.elements) {
-        if (this.elements.hasOwnProperty(key) && user.hasOwnProperty(key)) {
-          switch (this.elements[key].type) {
-            case 'radio':
-              if (inputsArr[i].checked == true)
-                user[key] = this.elements[key].value;
-              break;
-            case 'checkbox':
-              user[key] = this.elements[key].checked;
-              break;
-            default:
-              user[key] = this.elements[key].value;
-              break;
-          }
-        }
-      }
-      cb(Object.assign({}, user));
-    }
+    this.formEl.addEventListener('submit', handler, false);
   }
 
   /**

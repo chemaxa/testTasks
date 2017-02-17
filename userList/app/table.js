@@ -14,9 +14,9 @@ export default class Table {
   /**
    * Creates an instance of Table.
    * 
-   * @param {any} selector for DOM element
-   * @param {any} collection of users
-   * @param {any} handler callback for form events
+   * @param {string} selector for DOM element
+   * @param {Object} collection of users
+   * @param {Function} handler callback for form events
    * 
    * @memberOf Table
    */
@@ -46,7 +46,7 @@ export default class Table {
    * 
    * @memberOf Table
    */
-  init(list = this.collection['_elems']) {
+  init(list) {
     $(this.tableEl).find('tbody').empty();
     this.collection.forEach((user) => {
       $(this.tableEl).find('tbody').append(this._getRowStr(user));
@@ -134,7 +134,7 @@ export default class Table {
   /**
    * 
    * 
-   * @param {any} indx
+   * @param {number} indx
    * @returns {string} Name of Role
    * 
    * @memberOf Table
