@@ -151,7 +151,7 @@ class Mediator {
       if (this.form.formEl.elements.hasOwnProperty(key) && user.hasOwnProperty(key)) {
         switch (this.form.formEl.elements[key].type) {
           case 'radio':
-            if (inputsArr[i].checked == true)
+            if (inputsArr[i].checked === true)
               user[key] = this.form.formEl.elements[key].value;
             break;
           case 'checkbox':
