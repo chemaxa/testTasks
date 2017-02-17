@@ -12,14 +12,15 @@ class Mediator {
    * @memberOf Mediator
    */
   constructor() {
-    this.tableHandler=this.tableHandler.bind(this);
     this.validate = this.validate.bind(this);
-    this.editUser=this.editUser.bind(this);
+    this.editUser = this.editUser.bind(this);
+    this.tableHandler = this.tableHandler.bind(this);
+    this.formHandler = this.formHandler.bind(this);
 
-    this.collection = new Collection(),
-    this.validator = new Validator(),
-    this.table = new Table('[data-app-list]', this.collection, this.tableHandler),
-    this.form = new Form('[data-app-form]'),
+    this.collection = new Collection();
+    this.validator = new Validator();
+    this.table = new Table('[data-app-list]', this.collection, this.tableHandler);
+    this.form = new Form('[data-app-form]', this.formHandler);
     this.notificator = new Notificator(this.form);
   }
 
@@ -30,7 +31,6 @@ class Mediator {
    * @memberOf Mediator
    */
   init() {
-    this.form.getDataFromHtml.call(this, this.validate);
     this.table.sort('active', 'ASC');
   }
 
@@ -80,7 +80,7 @@ class Mediator {
   }
 
   /**
-   * Delet user from Collection
+   * Delete user from Collection
    * 
    * @param {string} login
    * @returns {boolean} false if user not exist
@@ -101,7 +101,7 @@ class Mediator {
    * 
    * @memberOf Mediator
    */
-  editUser(login){
+  editUser(login) {
     let item = this.collection.getItem(login);
     this.form.setDataToHtml(item);
   }
@@ -109,7 +109,7 @@ class Mediator {
   /**
    * Callback for table events
    * 
-   * @param {Object} event
+   * @param {Object} event on table element
    * 
    * @memberOf Mediator
    */
@@ -127,9 +127,47 @@ class Mediator {
       this.editUser(event.target.dataset.appEdit);
     }
   }
+
+  /**
+   * 
+   * 
+   * @param {Object} Form submit event with User data
+   * 
+   * @memberOf Mediator
+   */
+  formHandler(event) {
+    event.preventDefault();
+    let user = {
+      first_name: '',
+      last_name: '',
+      active: '',
+      age: '',
+      login: '',
+      password: '',
+      role: ''
+    };
+
+    for (let key in this.form.formEl.elements) {
+      if (this.form.formEl.elements.hasOwnProperty(key) && user.hasOwnProperty(key)) {
+        switch (this.form.formEl.elements[key].type) {
+          case 'radio':
+            if (inputsArr[i].checked === true)
+              user[key] = this.form.formEl.elements[key].value;
+            break;
+          case 'checkbox':
+            user[key] = this.form.formEl.elements[key].checked;
+            break;
+          default:
+            user[key] = this.form.formEl.elements[key].value;
+            break;
+        }
+      }
+    }
+    this.validate(Object.assign({}, user));
+  }
 }
 
-;(function Main() {
+(function Main() {
   let mediator = new Mediator();
   mediator.init();
 })();
