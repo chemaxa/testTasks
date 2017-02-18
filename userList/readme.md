@@ -48,4 +48,6 @@ login, если функция не задана
 сортировкой по полю active — вначале показываем активных
 пользователей, затем неактивных
 
+
 Результат можно увидеть [здесь](https://rawgit.com/chemaxa/testTasks/gh-pages/userList/public/index.html)
+
