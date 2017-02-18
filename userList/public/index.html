@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>UserList test task</title>
+    <!-- Bootstrap -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="assets/css/media.css">
+</head>
+
+<body class="page">
+    <header class="container page__header">
+        <h1>Тестовое задание, CRUD приложение список пользователей.</h1>
+    </header>
+    <main class="container page__content" data-app-container="app">
+        <div class="row">
+            <div class="col-md-3 col-sm-12 col-xs-12">
+                <!--    
+                        1. first_name — тип string, от 3 до 15 символов
+                        2. last_name — тип string, от 3 до 25 символов
+                        3. active — тип boolean, по умолчанию true
+                        4. age — тип number, целые числа в диапазоне от 18 до 55
+
+                        5. login — тип string, разрешённые символы — a-z, 0-9, _ и -
+                        6. password — тип string, минимум 8 символов
+                        7. role — тип number, один из {1: ‘Administrator’, 2: ‘Technician’, 3:
+                        ‘Manager’, 4: ‘Supervisor’}
+                        8. registered_on — тип number, таймстемп времени создания юзера 
+                -->
+                <form data-app-form="editForm">
+                    <div class="form-group">
+                        <label for="first_name">Имя (от 3 до 15 букв)</label>
+                        <input value="" type="text" class="form-control" name="first_name" placeholder="Имя" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="last_name">Фамилия (от 3 до 25 букв)</label>
+                        <input value="" type="text" class="form-control" name="last_name" placeholder="Фамилия" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Активный
+                            <input type="checkbox" name="active" >
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Возраст (От 18 до 55 )</label>
+                        <input value="" type="number" class="form-control" name="age" placeholder="Возраст" required min="18" max="55" step="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="login">Логин ( Разрешенные символы a-z, 0-9, _ и -, не менее 3 символов)</label>
+                        <input value="" type="text" class="form-control" name="login" placeholder="Логин" required pattern="^[a-z0-9_-]{3,}$">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Пароль (не менее 8 символов)</label>
+                        <input value="" type="password" class="form-control" name="password" placeholder="Пароль" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Роль</label>
+                        <select name="role" class="form-control" required>
+                            <option>Роль</option>
+                            <option value="1">Administrator</option>
+                            <option value="2">Technician</option>
+                            <option value="3">Manager</option>
+                            <option value="4">Superviser</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-success">Сохранить</button>
+                    <button type="reset" class="btn btn-warning">Сбросить</button>
+                </form>
+            </div>
+            <div class="col-md-9 col-sm-12 col-xs-12">
+                <table class="table table-hover" data-app-list="userList">
+                    <thead>
+                        <tr>
+                            <th data-app-sort="role" ><span class="glyphicon glyphicon-sort-by-alphabet"></span>&nbsp;Role</th>
+                            <th data-app-sort="login"><span class="glyphicon glyphicon-sort-by-alphabet"></span>&nbsp;Login</th>
+                            <th data-app-sort="first_name"><span class="glyphicon glyphicon-sort-by-alphabet"></span>&nbsp;Full Name</th>
+                            <th data-app-sort="age"><span class="glyphicon glyphicon-sort-by-order"></span>&nbsp;Age</th>
+                            <th data-app-sort="registered_on" ><span class="glyphicon glyphicon-sort-by-order"></span>&nbsp;Registered on</th>
+                            <th data-app-sort="active">Active</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Data is loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    <!-- Polyfills -->
+    <!-- <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script> -->
+    <!-- Assets -->
+    <script src="assets/js/jquery-2.2.2.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <!-- App -->
+    <script src="bundle.js"></script>
+</body>
+
+</html>
